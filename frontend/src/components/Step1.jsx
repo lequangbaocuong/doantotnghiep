@@ -1,0 +1,42 @@
+import React, { useState } from "react";
+
+export default function ReportStep1({ nextStep, updateFormData, data }) {
+  const [form, setForm] = useState(data);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleNext = () => {
+    updateFormData(form);
+    nextStep();
+  };
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-6 text-center text-gray-700">THÔNG TIN NGƯỜI GỬI</h2>
+      <div className="grid grid-cols-2 gap-4">
+        <input name="fullname" placeholder="Họ và tên" value={form.fullname} onChange={handleChange} className="border p-2 rounded" />
+        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} className="border p-2 rounded" />
+        <input name="phone" placeholder="Số điện thoại" value={form.phone} onChange={handleChange} className="border p-2 rounded" />
+        <input name="address" placeholder="Địa chỉ" value={form.address} onChange={handleChange} className="border p-2 rounded" />
+      </div>
+
+      <div className="mt-4">
+        <label className="block font-medium mb-2">Mối quan hệ với vụ việc</label>
+        <select name="relation" value={form.relation} onChange={handleChange} className="border p-2 rounded w-full">
+          <option value="">-- Chọn --</option>
+          <option value="Nhân chứng">Nhân chứng</option>
+          <option value="Nạn nhân">Nạn nhân</option>
+          <option value="Nghi phạm">Nghi phạm</option>
+        </select>
+      </div>
+
+      <div className="mt-6 text-right">
+        <button onClick={handleNext} className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">
+          Tiếp tục
+        </button>
+      </div>
+    </div>
+  );
+}

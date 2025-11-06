@@ -24,7 +24,9 @@ function TrangChu() {
               <p className="text-gray-600 mb-4">
                 Người dân có thể gửi thông tin, hình ảnh, hoặc bằng chứng về các hành vi phạm tội, vi phạm pháp luật.
               </p>
-              <button className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800">
+              <button className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800"
+              type="button" onClick={() => window.location.href='/report'}
+              >
                 Gửi tố giác ngay
               </button>
             </div>
