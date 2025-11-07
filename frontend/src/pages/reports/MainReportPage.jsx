@@ -51,7 +51,7 @@ export default function ReportPage() {
             data={formData}
           />
         )}
-        {step === 3 && <ReportStep3 data={formData} />}
+        {step === 3 && <ReportStep3 data={formData} prevStep={prevStep} />}
       </div>
     </div>
   );

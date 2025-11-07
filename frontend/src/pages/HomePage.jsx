@@ -34,12 +34,14 @@ function TrangChu() {
             {/* Tra cứu vụ án */}
             <div className="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
               <h2 className="text-xl font-semibold text-blue-700 mb-3">
-                Tra cứu vụ án
+                Tra cứu và gửi chứng cứ vụ án 
               </h2>
               <p className="text-gray-600 mb-4">
-                Cán bộ và người dân có thể xem thông tin về các vụ án đang điều tra, truy nã, hoặc đã kết thúc.
+                Cán bộ và người dân có thể xem thông tin về các vụ án đang điều tra, và gửi chứng cứ cần thiết để phục vụ mục đích điều tra
               </p>
-              <button className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800">
+              <button className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800"
+              type="button" onClick={() => window.location.href='/cases'}
+              >
                 Xem danh sách vụ án
               </button>
             </div>
