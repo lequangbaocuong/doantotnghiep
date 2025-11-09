@@ -44,7 +44,9 @@ export default function Header() {
             <li className="hover:text-[#ff5252] cursor-pointer transition">
               VỤ ÁN
             </li>
-            <li className="hover:text-[#ff5252] cursor-pointer transition">
+            <li className="hover:text-[#ff5252] cursor-pointer transition"
+              onClick={() => window.location.href = '/statistics'}
+            >
               THỐNG KÊ
             </li>
             <li className="hover:text-[#ff5252] cursor-pointer transition">

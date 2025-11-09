@@ -5,6 +5,8 @@ import Login from "../pages/Login";
 import ReportPage from "../pages/reports/MainReportPage";
 import CaseLists from "../pages/listofcases/CaseLists";
 import SubmitEvidences from "../pages/listofcases/SubmitEvidences";
+import ThongKePage from "../pages/thongke/StatisticsPage";
+import ProfilePage from "../pages/profile/ProfilePage";
 
 export default function AppRoutes() {
     return (  
@@ -14,6 +16,8 @@ export default function AppRoutes() {
             <Route path="/report" element={<ReportPage />} />
             <Route path="/cases" element={<CaseLists />} />
             <Route path="/evidence/:id" element={<SubmitEvidences />} />
+            <Route path="/statistics" element={<ThongKePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
         </Routes>
     );
 }
