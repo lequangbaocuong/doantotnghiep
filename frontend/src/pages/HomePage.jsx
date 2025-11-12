@@ -54,7 +54,9 @@ function TrangChu() {
               <p className="text-gray-600 mb-4">
                 Cập nhật nhanh chóng tình hình tội phạm, số vụ án, tỷ lệ phá án, và mức độ an ninh tại địa phương.
               </p>
-              <button className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">
+              <button className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700"
+              type="button" onClick={() => window.location.href='/statistics'}
+              >
                 Xem thống kê
               </button>
             </div>

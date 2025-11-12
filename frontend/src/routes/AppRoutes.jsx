@@ -12,6 +12,9 @@ import ThuTruongDonVi from "../pages/congan/ThuTruong";
 import CongAn_CaseLists from "../pages/congan/CongAn_CaseLists";
 import DangTaiTruyNa from "../pages/congan/DangTaiTruyNa";
 import TaoHoSoVuAn from "../pages/congan/TaoHoSoVuAn";
+import PhanTichVuAn from "../pages/congan/PhanTichVuAn";
+import PhanCongDieuTra from "../pages/congan/PhanCongDieuTra";
+import DuyetTruyNa from "../pages/congan/DuyetTruyNa";
 export default function AppRoutes() {
     return (  
         <Routes>
@@ -27,6 +30,9 @@ export default function AppRoutes() {
             <Route path="/congan/caselists" element={<CongAn_CaseLists />} />
             <Route path="/congan/dangtaitruyna" element={<DangTaiTruyNa />} />
             <Route path="/congan/taohosovuan" element={<TaoHoSoVuAn />} />
+            <Route path="/thutruong/phan-tich-vu-an" element={<PhanTichVuAn />} />
+            <Route path="/thutruong/phan-cong-dieu-tra" element={<PhanCongDieuTra />} />
+            <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
         </Routes>
     );
 }

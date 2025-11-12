@@ -22,6 +22,15 @@ export default function ReportStep1({ nextStep, updateFormData, data }) {
         <input name="address" placeholder="Địa chỉ" value={form.address} onChange={handleChange} className="border p-2 rounded" />
       </div>
 
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        <input name="cccd" placeholder="Số CCCD/CMND" value={form.cccd} onChange={handleChange} className="border p-2 rounded" />
+        <select name="gender" value={form.gender} onChange={handleChange} className="border p-2 rounded">
+          <option value="nam">Nam</option>
+          <option value="nữ">Nữ</option>
+          <option value="khác">Khác</option>
+        </select>
+      </div>
+
       <div className="mt-4">
         <label className="block font-medium mb-2">Mối quan hệ với vụ việc</label>
         <select name="relation" value={form.relation} onChange={handleChange} className="border p-2 rounded w-full">
@@ -30,6 +39,19 @@ export default function ReportStep1({ nextStep, updateFormData, data }) {
           <option value="Nạn nhân">Nạn nhân</option>
           <option value="Nghi phạm">Nghi phạm</option>
         </select>
+      </div>
+
+      <div className="mt-3">
+        <label className="inline-flex items-center">
+          <input
+            type="checkbox"
+            name="anonymous"
+            checked={form.anonymous}
+            onChange={(e) => setForm({ ...form, anonymous: e.target.checked })}
+            className="mr-2"
+          />
+          Gửi ẩn danh
+        </label>
       </div>
 
       <div className="mt-6 text-right">

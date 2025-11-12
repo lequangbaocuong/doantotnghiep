@@ -33,6 +33,23 @@ export default function ReportStep2({ nextStep, prevStep, updateFormData, data }
         <textarea name="description" placeholder="Mô tả chi tiết vụ việc" value={form.description} onChange={handleChange} className="border p-2 rounded col-span-2 h-32" />
       </div>
 
+      <input
+        type="file"
+        multiple
+        onChange={(e) => setForm({ ...form, evidence: e.target.files })}
+        className="border p-2 rounded col-span-2"
+      />
+      <select
+        name="evidenceType"
+        value={form.evidenceType}
+        onChange={handleChange}
+        className="border p-2 rounded col-span-2"
+      >
+        <option value="">Loại chứng cứ</option>
+        <option value="vật lý">Vật lý</option>
+        <option value="phi vật lý">Phi vật lý</option>
+      </select>
+
       <div className="mt-6 flex justify-between">
         <button onClick={prevStep} className="bg-gray-400 text-white px-6 py-2 rounded hover:bg-gray-500 transition">
           Quay lại

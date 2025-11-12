@@ -35,22 +35,37 @@ export default function Header() {
         <div className="flex items-center gap-8">
           <Menu className="text-[#d32f2f] w-6 h-6 cursor-pointer" />
           <ul className="flex items-center gap-6 font-medium">
-            <li className="hover:text-[#ff5252] cursor-pointer transition">
-              TRANG CHỦ
+            <li>
+              <Link
+              to="/"
+              className="hover:text-[#ff5252] cursor-pointer transition"
+              >
+                  TRANG CHỦ
+              </Link>
             </li>
-            <li className="hover:text-[#ff5252] cursor-pointer transition">
-              HỒ SƠ TỘI PHẠM
+            <li>
+              <Link
+                to="/cases"
+                className="hover:text-[#ff5252] cursor-pointer transition"
+              >
+                VỤ ÁN
+              </Link>
             </li>
-            <li className="hover:text-[#ff5252] cursor-pointer transition">
-              VỤ ÁN
+            <li>
+              <Link
+                to="/statistics"
+                className="hover:text-[#ff5252] cursor-pointer transition"
+              >
+                THỐNG KÊ
+              </Link>
             </li>
-            <li className="hover:text-[#ff5252] cursor-pointer transition"
-              onClick={() => window.location.href = '/statistics'}
-            >
-              THỐNG KÊ
-            </li>
-            <li className="hover:text-[#ff5252] cursor-pointer transition">
-              LIÊN HỆ
+            <li>
+              <Link
+                to="/lienhe"
+                className="hover:text-[#ff5252] cursor-pointer transition"
+              >
+                LIÊN HỆ
+              </Link>
             </li>
           </ul>
         </div>
