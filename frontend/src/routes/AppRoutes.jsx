@@ -15,6 +15,9 @@ import TaoHoSoVuAn from "../pages/congan/TaoHoSoVuAn";
 import PhanTichVuAn from "../pages/congan/PhanTichVuAn";
 import PhanCongDieuTra from "../pages/congan/PhanCongDieuTra";
 import DuyetTruyNa from "../pages/congan/DuyetTruyNa";
+import ForgotPassword from "../pages/ForgotPassword";
+import ChangePassword from "../pages/ChangePassword";
+import LoginSuccess from "../components/LoginSuccess";
 export default function AppRoutes() {
     return (  
         <Routes>
@@ -26,13 +29,16 @@ export default function AppRoutes() {
             <Route path="/statistics" element={<ThongKePage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/congan" element={<CongAnPhuong />} />
-            <Route path="/thutruong" element={<ThuTruongDonVi />} /> 
             <Route path="/congan/caselists" element={<CongAn_CaseLists />} />
             <Route path="/congan/dangtaitruyna" element={<DangTaiTruyNa />} />
             <Route path="/congan/taohosovuan" element={<TaoHoSoVuAn />} />
+            <Route path="/thutruong" element={<ThuTruongDonVi />} />
             <Route path="/thutruong/phan-tich-vu-an" element={<PhanTichVuAn />} />
             <Route path="/thutruong/phan-cong-dieu-tra" element={<PhanCongDieuTra />} />
             <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/login-success" element={<LoginSuccess />} />  
         </Routes>
     );
 }

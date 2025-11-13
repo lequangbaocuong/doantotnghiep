@@ -16,7 +16,9 @@ export default function CongAnPhuong() {
           <p className="text-gray-400 text-sm mb-3">
             Tiếp nhận và xử lý thông tin tố giác từ người dân.
           </p>
-          <button className="px-4 py-2 bg-[#ff5252] rounded-md hover:bg-[#e04848]">
+          <button className="px-4 py-2 bg-[#ff5252] rounded-md hover:bg-[#e04848]"
+            onClick={() => {window.location.href = '/congan/danhsachtogiac';}}
+          >
             Xem danh sách
           </button>
         </div>
@@ -28,7 +30,9 @@ export default function CongAnPhuong() {
           <p className="text-gray-400 text-sm mb-3">
             Khởi tạo hồ sơ cho vụ án mới dựa trên thông tin tố giác.
           </p>
-          <button className="px-4 py-2 bg-[#4ECDC4] rounded-md hover:bg-[#38b2a3]">
+          <button className="px-4 py-2 bg-[#4ECDC4] rounded-md hover:bg-[#38b2a3]"
+            onClick={() => {window.location.href = '/congan/taohosovuan';}}
+          >
             Tạo hồ sơ
           </button>
         </div>
@@ -40,7 +44,9 @@ export default function CongAnPhuong() {
           <p className="text-gray-400 text-sm mb-3">
             Tra cứu thông tin hồ sơ các vụ án đã khởi tạo.
           </p>
-          <button className="px-4 py-2 bg-[#A29BFE] rounded-md hover:bg-[#8e83fa]">
+          <button className="px-4 py-2 bg-[#A29BFE] rounded-md hover:bg-[#8e83fa]"
+            onClick={() => {window.location.href = '/congan/caselists';}}
+          >
             Tra cứu
           </button>
         </div>
@@ -52,7 +58,9 @@ export default function CongAnPhuong() {
           <p className="text-gray-400 text-sm mb-3">
             Đăng tải và cập nhật thông tin truy nã tội phạm.
           </p>
-          <button className="px-4 py-2 bg-[#FF6B6B] rounded-md hover:bg-[#e05252]">
+          <button className="px-4 py-2 bg-[#FF6B6B] rounded-md hover:bg-[#e05252]"
+            onClick={() => {window.location.href = '/congan/dangtaitruyna';}}
+          >
             Đăng tải
           </button>
         </div>

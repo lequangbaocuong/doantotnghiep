@@ -37,7 +37,9 @@ export default function ThuTruongDonVi() {
           <p className="text-gray-400 text-sm mb-3">
             Xem danh sách và phân tích chi tiết từng vụ án.
           </p>
-          <button className="px-4 py-2 bg-[#4ECDC4] rounded-md hover:bg-[#38b2a3]">
+          <button className="px-4 py-2 bg-[#4ECDC4] rounded-md hover:bg-[#38b2a3]"
+            onClick={() => navigate("/thutruong/phan-tich-vu-an")}
+          >
             Xem danh sách
           </button>
         </div>
@@ -52,8 +54,10 @@ export default function ThuTruongDonVi() {
           <p className="text-gray-400 text-sm mb-3">
             Chọn cán bộ phụ trách và giao nhiệm vụ cho từng vụ án.
           </p>
-          <button className="px-4 py-2 bg-[#FFA502] rounded-md hover:bg-[#e69e00]">
-            Phân công ngay
+          <button className="px-4 py-2 bg-[#FFA502] rounded-md hover:bg-[#e69e00]"
+            onClick={() => navigate("/thutruong/phan-cong-dieu-tra")}
+          >
+            Phân công điều tra
           </button>
         </div>
 

@@ -4,7 +4,7 @@ import AuthLayout from "../components/auth_layout.jsx";
 // import axios from "axios";
 
 export default function Login() {
-  const [user, setUser] = useState({ email: "", password: "" });
+  const [user, setUser] = useState({ cccd: "", password: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,10 +27,10 @@ export default function Login() {
     <AuthLayout title="ĐĂNG NHẬP HỆ THỐNG">
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={user.email}
+          type="text"
+          name="cccd"
+          placeholder="CCCD"
+          value={user.cccd}
           onChange={handleChange}
           className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
         />
@@ -48,6 +48,11 @@ export default function Login() {
         >
           Đăng nhập
         </button>
+        <div className="text-center mt-3">
+          <Link to="/forgot-password" className="text-[#ff5252] hover:underline">
+            Quên mật khẩu?
+          </Link>
+        </div>
       </form>
     </AuthLayout>
   );

@@ -2,13 +2,15 @@ import React, { useState } from "react";
 
 export default function ProfilePage() {
   const [user, setUser] = useState({
-    name: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    phone: "0905123456",
+    name: "Lê Quang Bảo Cường",
+    email: "lequangbaocuong@gmail.com",
+    phone: "0935089651",
     cccd: "048123456789",
-    address: "k52/52 Lâm Hoành, Phường An Hải, Quận Sơn Trà, TP. Đà Nẵng",
+    address: "K52/52 Lâm Hoành, Phường An Hải, Quận Sơn Trà, TP. Đà Nẵng",
+    ngaysinh: "2003-09-06",
+    gioitinh: "Nam",
     role: "Người dân",
-    joinedDate: "12/05/2024",
+    joinedDate: "11/11/2025",
     avatar: "/public/avatar-default.png",
   });
 
@@ -76,6 +78,31 @@ export default function ProfilePage() {
               onChange={(e) => setUser({ ...user, email: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             />
+          </div>
+          
+          <div>
+            <label className="block text-gray-400 mb-1">Ngày sinh</label>
+            <input
+              type="date"
+              value={user.ngaysinh}
+              disabled={!editMode}
+              onChange={(e) => setUser({ ...user, ngaysinh: e.target.value })}
+              className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-400 mb-1">Giới tính</label>
+            <select
+              value={user.gioitinh}
+              disabled={!editMode}
+              onChange={(e) => setUser({ ...user, gioitinh: e.target.value })}
+              className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
+            >
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
           </div>
 
           <div>

@@ -76,9 +76,9 @@ export default function TaoHoSoVuAn() {
                 onChange={handleChange}
                 className="w-full bg-[#162436] border border-gray-600 rounded-md px-4 py-2"
               >
-                <option value="Đang điều tra">Đang điều tra</option>
-                <option value="Đã kết thúc">Đã kết thúc</option>
-                <option value="Chờ báo cáo">Chờ báo cáo</option>
+                <option value="chưa xử lý">Chưa xử lý</option>
+                <option value="đang xử lý">Đang xử lý</option>
+                <option value="đã xử lý">Đã xử lý</option>
               </select>
             </div>
 
@@ -90,9 +90,10 @@ export default function TaoHoSoVuAn() {
                 onChange={handleChange}
                 className="w-full bg-[#162436] border border-gray-600 rounded-md px-4 py-2"
               >
-                <option value="Nhẹ">Nhẹ</option>
-                <option value="Trung bình">Trung bình</option>
-                <option value="Nghiêm trọng">Nghiêm trọng</option>
+                <option value="thấp">Thấp</option>
+                <option value="trung bình">Trung bình</option>
+                <option value="cao">Cao</option>
+                <option value="nghiêm trọng">Nghiêm trọng</option>
               </select>
             </div>
           </div>
