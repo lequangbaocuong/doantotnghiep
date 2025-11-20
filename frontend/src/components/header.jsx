@@ -26,7 +26,7 @@ export default function Header() {
             CỔNG THÔNG TIN ĐIỀU TRA TỘI PHẠM
           </h1>
           <p className="text-base text-gray-300 mt-2">
-            Bộ Công An - Hệ thống quản lý & truy vết tội phạm quốc gia
+            HỆ THỐNG QUẢN LÝ VÀ TRA CỨU THÔNG TIN VỤ ÁN, HỒ SƠ TỘI PHẠM CÔNG AN PHƯỜNG SƠN TRÀ
           </p>
         </div>
       </div>

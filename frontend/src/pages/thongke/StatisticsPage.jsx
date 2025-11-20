@@ -26,7 +26,6 @@ export default function ThongKePage() {
   ];
 
   const dataByArea = [
-    { name: "Phường An Hải Bắc", value: 6 },
     { name: "Phường Phước Mỹ", value: 5 },
     { name: "Phường Mân Thái", value: 4 },
     { name: "Phường Thọ Quang", value: 3 },

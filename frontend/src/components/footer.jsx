@@ -28,7 +28,7 @@ export default function Footer() {
             </li>
             <li className="hover:text-[#ff5252] transition cursor-pointer">
               Hồ sơ tội phạm
-            </li>
+            </li>  
             <li className="hover:text-[#ff5252] transition cursor-pointer">
               Vụ án
             </li>
@@ -49,26 +49,16 @@ export default function Footer() {
             <li className="flex items-start gap-2">
               <MapPin className="text-[#ff5252] w-5 h-5 mt-0.5" />
               <span>
-                44 Yết Kiêu, Quận Hoàn Kiếm, Hà Nội<br />
-                (Trụ sở Bộ Công An)
+                 37 Đ. Trần Hưng Đạo, Nại Hiên Đông, Sơn Trà, Đà Nẵng<br />
+                (Trụ sở Công an phường Sơn Trà)
               </span>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="text-[#ff5252] w-5 h-5" />
-              <span>Hotline: (024) 3826 4029</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <Mail className="text-[#ff5252] w-5 h-5" />
-              <span>Email: contact@bocongan.gov.vn</span>
+              <span>Hotline: 0236 3831 139</span>
             </li>
           </ul>
         </div>
-      </div>
-
-      <div className="mt-10 border-t border-gray-700 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Bộ Công An Việt Nam — Hệ thống điều tra & truy vết tội phạm.  
-        <br className="hidden md:block" />
-        <span className="text-gray-400">Bảo mật | Chính sách | Điều khoản sử dụng</span>
       </div>
     </footer>
   );
