@@ -39,7 +39,6 @@ export default function ThongKePage() {
         THỐNG KÊ TỘI PHẠM & AN NINH PHƯỜNG SƠN TRÀ
       </h1>
 
-      {/* Bộ lọc */}
       <div className="flex justify-end mb-6">
         <select
           className="bg-[#1b2838] text-white px-4 py-2 rounded border border-gray-600"
@@ -52,7 +51,6 @@ export default function ThongKePage() {
         </select>
       </div>
 
-      {/* Biểu đồ loại tội phạm */}
       <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg mb-10">
         <h2 className="text-xl font-semibold mb-4 text-gray-200">
           Thống kê vụ án theo loại tội phạm ({year})
@@ -68,7 +66,6 @@ export default function ThongKePage() {
         </ResponsiveContainer>
       </div>
 
-      {/* Biểu đồ theo khu vực */}
       <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg mb-10">
         <h2 className="text-xl font-semibold mb-4 text-gray-200">
           Tình hình an ninh theo khu vực
@@ -106,7 +103,6 @@ export default function ThongKePage() {
         </div>
       </div>
 
-      {/* Kết luận tổng hợp */}
       <div className="bg-[#162436] p-6 rounded-2xl shadow-md">
         <h2 className="text-lg font-semibold text-gray-100 mb-3">
           Tổng quan nhận định:

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth_layout.jsx";
-// import axios from "axios";
+import axios from "axios";
 
 export default function Login() {
-  const [user, setUser] = useState({ cccd: "", password: "" });
+  const [user, setUser] = useState({ cccd: "", matkhau: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -13,13 +13,16 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     e.preventDefault();
     try {
-      //const res = await axios.post("http://localhost:5000/user/login", user);
+      const res = await axios.post("http://localhost:5000/api/auth/login", user);
+
       alert("Đăng nhập thành công!");
-      //localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.token);
       navigate("/");
     } catch (err) {
-      alert("Đăng nhập thất bại, vui lòng kiểm tra lại thông tin!");
+      console.log(err.response?.data);
+      alert("Đăng nhập thất bại, vui lòng kiểm tra lại CCCD hoặc mật khẩu!");
     }
   };
 
@@ -36,9 +39,9 @@ export default function Login() {
         />
         <input
           type="password"
-          name="password"
+          name="matkhau"
           placeholder="Mật khẩu"
-          value={user.password}
+          value={user.matkhau}
           onChange={handleChange}
           className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
         />
