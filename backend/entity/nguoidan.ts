@@ -31,4 +31,7 @@ export class nguoidan {
 
     @Column({ type: "date", nullable: true })
     ngaysinh!: Date;
+
+    @Column({ type: "boolean", default: true })
+    lan_dau_dang_nhap!: boolean;
 }

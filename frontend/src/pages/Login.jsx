@@ -19,7 +19,7 @@ export default function Login() {
 
       alert("Đăng nhập thành công!");
       localStorage.setItem("token", res.data.token);
-      navigate("/");
+      navigate("/change-password", { state: { cccd: res.data.user.cccd } });
     } catch (err) {
       console.log(err.response?.data);
       alert("Đăng nhập thất bại, vui lòng kiểm tra lại CCCD hoặc mật khẩu!");
