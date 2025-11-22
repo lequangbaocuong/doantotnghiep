@@ -13,13 +13,17 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     e.preventDefault();
+
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", user);
-
-      alert("Đăng nhập thành công!");
       localStorage.setItem("token", res.data.token);
-      navigate("/change-password", { state: { cccd: res.data.user.cccd } });
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      const userData = res.data.user;
+      if (userData.lan_dau_dang_nhap) {
+        navigate("/change-password", { state: { cccd: userData.cccd } }); 
+      } else {
+        navigate("/login-success"); 
+      }
     } catch (err) {
       console.log(err.response?.data);
       alert("Đăng nhập thất bại, vui lòng kiểm tra lại CCCD hoặc mật khẩu!");

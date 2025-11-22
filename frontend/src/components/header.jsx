@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Menu, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Header() {
+  const [user, setUser] = useState(null);
+   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
+  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    setUser(null); 
+  };
   return (
     <header className="w-full">
       <div
@@ -82,13 +92,39 @@ export default function Header() {
             </button>
           </div>
 
-          <Link
-            to="/login"
-            className="flex items-center gap-2 bg-[#1b2838] border border-gray-600 text-white px-4 py-2 rounded-lg hover:bg-[#ff5252] hover:border-[#ff5252] transition"
-          >
-            <User className="w-5 h-5" />
-            <span className="font-medium">Đăng nhập</span>
-          </Link>
+          {!user ? (
+            <Link
+              to="/login"
+              className="flex items-center gap-2 bg-[#1b2838] border border-gray-600 text-white px-4 py-2 rounded-lg hover:bg-[#ff5252] hover:border-[#ff5252] transition"
+            >
+              <User className="w-5 h-5" />
+              <span className="font-medium">Đăng nhập</span>
+            </Link>
+          ) : (
+            <div className="relative group">
+              {/* Nút hiển thị tên */}
+              <button className="flex items-center gap-2 bg-[#1b2838] border border-gray-600 text-white px-4 py-2 rounded-lg hover:bg-[#ff5252] hover:border-[#ff5252] transition cursor-pointer">
+                <User className="w-5 h-5" />
+                <span className="font-medium">{user?.hoten || "Người dùng"}</span>
+              </button>
+
+              {/* Dropdown — không biến mất khi di chuột */}
+              <div
+                className="
+                  absolute right-0 mt-2 w-40 bg-[#1b2838] border border-gray-700 
+                  rounded-lg shadow-md hidden group-hover:flex flex-col
+                  z-50 p-1 pointer-events-auto
+                "
+              >
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 hover:bg-[#ff5252] rounded-lg transition"
+                >
+                  Đăng xuất
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
     </header>
