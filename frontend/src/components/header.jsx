@@ -4,14 +4,24 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   const [user, setUser] = useState(null);
-   useEffect(() => {
+  
+  const loadUserFromStorage = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     setUser(storedUser);
-  }, []);
+  };
+
+  useEffect(() => {
+    loadUserFromStorage();
+    window.addEventListener('storageChange', loadUserFromStorage);
+    return () => {
+      window.removeEventListener('storageChange', loadUserFromStorage);
+    };
+  }, []); 
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     setUser(null); 
+    window.dispatchEvent(new Event('storageChange'));
   };
   return (
     <header className="w-full">

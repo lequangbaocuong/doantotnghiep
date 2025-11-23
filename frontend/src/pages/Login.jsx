@@ -18,6 +18,7 @@ export default function Login() {
       const res = await axios.post("http://localhost:5000/api/auth/login", user);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      window.dispatchEvent(new Event('storageChange'));
       const userData = res.data.user;
       if (userData.lan_dau_dang_nhap) {
         navigate("/change-password", { state: { cccd: userData.cccd } }); 
