@@ -1,20 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Cần import axios
 
 export default function ProfilePage() {
-  const [user, setUser] = useState({
-    name: "Lê Quang Bảo Cường",
-    email: "lequangbaocuong@gmail.com",
-    phone: "0935089651",
-    cccd: "048123456789",
-    address: "K52/52 Lâm Hoành, Phường An Hải, Quận Sơn Trà, TP. Đà Nẵng",
-    ngaysinh: "2003-09-06",
-    gioitinh: "Nam",
-    role: "Người dân",
-    joinedDate: "11/11/2025",
-    avatar: "/public/avatar-default.png",
-  });
-
+  const [user, setUser] = useState(null); // Khởi tạo user là null
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Không tìm thấy token. Vui lòng đăng nhập lại.");
+        setLoading(false);
+        return;
+      }
+      try {
+        const response = await axios.get("http://localhost:5000/api/auth/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+        
+        const apiUser = response.data;
+        setUser({
+          name: apiUser.hoten || "Đang cập nhật",
+          email: apiUser.email || "Đang cập nhật",
+          phone: apiUser.sodienthoai || "Đang cập nhật",
+          cccd: apiUser.cccd || "Đang cập nhật",
+          address: "Chưa có dữ liệu địa chỉ trong DB",   // tạm thời chưa có trong database
+          ngaysinh: apiUser.ngaysinh ? new Date(apiUser.ngaysinh).toISOString().split('T')[0] : "",
+          gioitinh: apiUser.gioitinh || "khác",
+          role: "Người dân", 
+          joinedDate: "11/11/2025", 
+          avatar: "/public/avatar-default.png",
+        });
+        setLoading(false);
+
+      } catch (err) {
+        console.error("Lỗi khi tải thông tin cá nhân:", err);
+        setError("Không thể tải thông tin cá nhân.");
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+  if (loading) {
+    return <div className="min-h-screen bg-[#0f1a26] text-white flex justify-center items-center">Đang tải...</div>;
+  }
+
+  if (error || !user) {
+    return <div className="min-h-screen bg-[#0f1a26] text-red-400 flex justify-center items-center">{error || "Không có dữ liệu người dùng."}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-[#0f1a26] text-white px-8 py-10">
@@ -22,7 +60,6 @@ export default function ProfilePage() {
         <h1 className="text-3xl font-bold mb-6 text-center text-[#ff5252]">
           TRANG CÁ NHÂN NGƯỜI DÙNG
         </h1>
-
         {/* Ảnh đại diện */}
         <div className="flex flex-col md:flex-row items-center gap-8 mb-8">
           <div className="relative">
@@ -99,9 +136,9 @@ export default function ProfilePage() {
               onChange={(e) => setUser({ ...user, gioitinh: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             >
-              <option value="Nam">Nam</option>
-              <option value="Nữ">Nữ</option>
-              <option value="Khác">Khác</option>
+              <option value="nam">Nam</option>
+              <option value="nữ">Nữ</option>
+              <option value="khác">Khác</option>
             </select>
           </div>
 
@@ -121,7 +158,7 @@ export default function ProfilePage() {
             <input
               type="text"
               value={user.cccd}
-              disabled={!editMode}
+              disabled={true} 
               onChange={(e) => setUser({ ...user, cccd: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             />
@@ -146,6 +183,7 @@ export default function ProfilePage() {
         </h3>
 
         <div className="overflow-x-auto">
+          {/* Lịch sử tố giác hiện tại đang là dữ liệu mock, cần một API khác để lấy dữ liệu thực tế */}
           <table className="min-w-full border border-gray-700 text-gray-300 text-sm">
             <thead className="bg-[#162436] text-gray-200">
               <tr>

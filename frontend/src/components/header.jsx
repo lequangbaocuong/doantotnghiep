@@ -107,7 +107,6 @@ export default function Header() {
               to="/login"
               className="flex items-center gap-2 bg-[#1b2838] border border-gray-600 text-white px-4 py-2 rounded-lg hover:bg-[#ff5252] hover:border-[#ff5252] transition"
             >
-              <User className="w-5 h-5" />
               <span className="font-medium">Đăng nhập</span>
             </Link>
           ) : (
@@ -121,11 +120,16 @@ export default function Header() {
               {/* Dropdown — không biến mất khi di chuột */}
               <div
                 className="
-                  absolute right-0 mt-2 w-40 bg-[#1b2838] border border-gray-700 
-                  rounded-lg shadow-md hidden group-hover:flex flex-col
-                  z-50 p-1 pointer-events-auto
-                "
+                 absolute right-0 top-full w-full bg-[#1b2838] border border-gray-700 
+                  rounded-lg shadow-md hidden group-hover:block
+                  z-50 p-1"
               >
+                <button
+                  onClick={() => window.location.href = '/profile'}
+                  className="w-full text-left px-4 py-2 hover:bg-[#ff5252] rounded-lg transition"
+                >
+                  Trang cá nhân
+                </button>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 hover:bg-[#ff5252] rounded-lg transition"

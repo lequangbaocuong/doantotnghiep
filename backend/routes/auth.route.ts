@@ -7,4 +7,6 @@ const router = Router();
 router.post("/login", AuthController.login);
 router.post("/change-password", verifyToken, AuthController.changePassword);
 router.post("/change-password-first-time", verifyToken, AuthController.changePasswordFirstTime);
+// lấy thông tin người dùng
+router.get("/profile", verifyToken, AuthController.getProfile);
 export default router;

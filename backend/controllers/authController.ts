@@ -83,7 +83,7 @@ export class AuthController {
 
     static changePasswordFirstTime = async (req: Request, res: Response) => {
         const userId = (req as any).userPayload.id;
-        const { matkhauMoi } = req.body; // Frontend chỉ gửi matkhauMoi
+        const { matkhauMoi } = req.body; 
         if (!matkhauMoi) {
             return res.status(400).json({ message: "Vui lòng nhập mật khẩu mới!" });
         }
@@ -96,7 +96,6 @@ export class AuthController {
             if (!user) {
                 return res.status(404).json({ message: "Không tìm thấy người dùng!" });
             }
-            // Chỉ cho phép dùng API này nếu lan_dau_dang_nhap = true
             if (!user.lan_dau_dang_nhap) {
                 return res.status(403).json({ 
                     message: "Tài khoản đã kích hoạt. Vui lòng dùng chức năng đổi mật khẩu thông thường (cần mật khẩu cũ)." 
@@ -109,6 +108,30 @@ export class AuthController {
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Lỗi server" });
+        }
+    };
+
+    static getProfile = async (req: Request, res: Response) => {
+        const userId = (req as any).userPayload.id; 
+        const nguoiDanRepo = AppDataSource.getRepository(nguoidan);
+        try {
+            const user = await nguoiDanRepo.findOneBy({ id_nguoidan: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+            }
+            return res.status(200).json({
+                id: user.id_nguoidan,
+                hoten: user.hoten,
+                cccd: user.cccd,
+                sodienthoai: user.sodienthoai,
+                gioitinh: user.gioitinh,
+                email: user.email,
+                ngaysinh: user.ngaysinh,
+                lan_dau_dang_nhap: user.lan_dau_dang_nhap,
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server nội bộ" });
         }
     };
 }
