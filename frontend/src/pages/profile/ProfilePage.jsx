@@ -54,6 +54,32 @@ export default function ProfilePage() {
     return <div className="min-h-screen bg-[#0f1a26] text-red-400 flex justify-center items-center">{error || "Không có dữ liệu người dùng."}</div>;
   }
 
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        alert("Lỗi: Không tìm thấy token. Vui lòng đăng nhập lại.");
+        return;
+    }
+    try {
+        const payload = {
+            sodienthoai: user.phone, 
+            email: user.email,
+            gioitinh: user.gioitinh.toLowerCase(), 
+        };
+        const response = await axios.put("http://localhost:5000/api/auth/profile", payload, {
+            headers: {
+                Authorization: `Bearer ${token}`, 
+            },
+        });
+
+        alert(response.data.message || "Cập nhật thành công!");
+        setEditMode(false); 
+    } catch (err) {
+        console.error("Lỗi khi cập nhật thông tin:", err.response?.data);
+        alert(`Cập nhật thất bại: ${err.response?.data?.message || "Lỗi server"}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0f1a26] text-white px-8 py-10">
       <div className="max-w-4xl mx-auto bg-[#1b2838] rounded-2xl p-8 shadow-xl">
@@ -83,7 +109,13 @@ export default function ProfilePage() {
               Ngày tham gia: {user.joinedDate}
             </p>
             <button
-              onClick={() => setEditMode(!editMode)}
+              onClick={() => {
+                if (editMode) {
+                    handleSave(); 
+                } else {
+                    setEditMode(true);
+                }
+              }}
               className="mt-3 px-5 py-2 rounded-md bg-[#ff5252] hover:bg-[#e04848] transition"
             >
               {editMode ? "Lưu thay đổi" : "Chỉnh sửa thông tin"}
@@ -100,10 +132,15 @@ export default function ProfilePage() {
             <input
               type="text"
               value={user.name}
-              disabled={!editMode}
+              disabled={true}
               onChange={(e) => setUser({ ...user, name: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             />
+            {editMode && (
+              <p className="text-yellow-400 text-xs mt-1">
+                Thông tin này không thể thay đổi!
+              </p>
+            )}
           </div>
 
           <div>
@@ -122,10 +159,15 @@ export default function ProfilePage() {
             <input
               type="date"
               value={user.ngaysinh}
-              disabled={!editMode}
+              disabled={true}
               onChange={(e) => setUser({ ...user, ngaysinh: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             />
+            {editMode && (
+              <p className="text-yellow-400 text-xs mt-1">
+                Thông tin này không thể thay đổi!
+              </p>
+            )}
           </div>
 
           <div>
@@ -162,6 +204,11 @@ export default function ProfilePage() {
               onChange={(e) => setUser({ ...user, cccd: e.target.value })}
               className="w-full bg-[#162436] rounded-md px-4 py-2 border border-gray-600 focus:outline-none focus:ring-1 focus:ring-[#ff5252]"
             />
+            {editMode && (
+              <p className="text-yellow-400 text-xs mt-1">
+                Thông tin này không thể thay đổi!
+              </p>
+            )}
           </div>
 
           <div className="md:col-span-2">

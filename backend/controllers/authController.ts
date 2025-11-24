@@ -134,4 +134,38 @@ export class AuthController {
             return res.status(500).json({ message: "Lỗi server nội bộ" });
         }
     };
+
+    static updateProfile = async (req: Request, res: Response) => {
+        const userId = (req as any).userPayload.id; 
+        const { hoten, sodienthoai, email, ngaysinh, gioitinh } = req.body;
+        const nguoiDanRepo = AppDataSource.getRepository(nguoidan);
+        try {
+            const user = await nguoiDanRepo.findOneBy({ id_nguoidan: userId });
+            if (!user) {
+                return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+            }
+            if (sodienthoai !== undefined) {
+                user.sodienthoai = sodienthoai;
+            }
+            if (email !== undefined) {
+                user.email = email;
+            }
+            if (gioitinh !== undefined) {
+                user.gioitinh = gioitinh; 
+            }
+            await nguoiDanRepo.save(user);
+            return res.status(200).json({ 
+                message: "Cập nhật thông tin cá nhân thành công!",
+                user: {
+                    sodienthoai: user.sodienthoai,
+                    email: user.email,
+                    gioitinh: user.gioitinh
+                }
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server nội bộ" });
+        }
+    };
 }
