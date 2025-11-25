@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth_layout.jsx";
 import axios from "axios";
+import LoginSuccess from "../components/LoginSuccess.jsx";
 
 export default function Login() {
   const [user, setUser] = useState({ cccd: "", matkhau: "" });
+  const [showSuccess, setShowSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleModalClose = () => {
+    setShowSuccess(false);
+    navigate("/");
   };
 
   const handleSubmit = async (e) => {
@@ -16,14 +23,18 @@ export default function Login() {
 
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", user);
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      window.dispatchEvent(new Event('storageChange'));
+
+      window.dispatchEvent(new Event("storageChange"));
+
       const userData = res.data.user;
+
       if (userData.lan_dau_dang_nhap) {
-        navigate("/change-password", { state: { cccd: userData.cccd } }); 
+        navigate("/change-password", { state: { cccd: userData.cccd } });
       } else {
-        navigate("/login-success"); 
+        setShowSuccess(true);
       }
     } catch (err) {
       console.log(err.response?.data);
@@ -32,36 +43,43 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout title="ĐĂNG NHẬP HỆ THỐNG">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="cccd"
-          placeholder="CCCD"
-          value={user.cccd}
-          onChange={handleChange}
-          className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
-        />
-        <input
-          type="password"
-          name="matkhau"
-          placeholder="Mật khẩu"
-          value={user.matkhau}
-          onChange={handleChange}
-          className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
-        />
-        <button
-          type="submit"
-          className="w-full py-2 bg-[#ff5252] hover:bg-[#e04848] rounded font-semibold transition"
-        >
-          Đăng nhập
-        </button>
-        <div className="text-center mt-3">
-          <Link to="/forgot-password" className="text-[#ff5252] hover:underline">
-            Quên mật khẩu?
-          </Link>
-        </div>
-      </form>
-    </AuthLayout>
+    <>
+      <AuthLayout title="ĐĂNG NHẬP HỆ THỐNG">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="cccd"
+            placeholder="CCCD"
+            value={user.cccd}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
+          />
+          <input
+            type="password"
+            name="matkhau"
+            placeholder="Mật khẩu"
+            value={user.matkhau}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded bg-[#0f1a26] border border-gray-600 focus:ring-1 focus:ring-[#ff5252] outline-none"
+          />
+          <button
+            type="submit"
+            className="w-full py-2 bg-[#ff5252] hover:bg-[#e04848] rounded font-semibold transition"
+          >
+            Đăng nhập
+          </button>
+
+          <div className="text-center mt-3">
+            <Link to="/forgot-password" className="text-[#ff5252] hover:underline">
+              Quên mật khẩu?
+            </Link>
+          </div>
+        </form>
+      </AuthLayout>
+
+      {showSuccess && (
+        <LoginSuccess isOpen={showSuccess} onClose={handleModalClose} />
+      )}
+    </>
   );
 }
