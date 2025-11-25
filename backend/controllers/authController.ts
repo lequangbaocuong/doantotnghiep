@@ -137,7 +137,7 @@ export class AuthController {
 
     static updateProfile = async (req: Request, res: Response) => {
         const userId = (req as any).userPayload.id; 
-        const { hoten, sodienthoai, email, ngaysinh, gioitinh } = req.body;
+        const { sodienthoai, email, diachi, gioitinh } = req.body;
         const nguoiDanRepo = AppDataSource.getRepository(nguoidan);
         try {
             const user = await nguoiDanRepo.findOneBy({ id_nguoidan: userId });
@@ -153,13 +153,17 @@ export class AuthController {
             if (gioitinh !== undefined) {
                 user.gioitinh = gioitinh; 
             }
+            if (diachi !== undefined) {
+                user.diachi = diachi;
+            }
             await nguoiDanRepo.save(user);
             return res.status(200).json({ 
                 message: "Cập nhật thông tin cá nhân thành công!",
                 user: {
                     sodienthoai: user.sodienthoai,
                     email: user.email,
-                    gioitinh: user.gioitinh
+                    gioitinh: user.gioitinh,
+                    diachi: user.diachi
                 }
             });
 

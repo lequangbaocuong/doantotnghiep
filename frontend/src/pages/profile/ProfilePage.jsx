@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Cần import axios
+import axios from "axios"; 
 
 export default function ProfilePage() {
-  const [user, setUser] = useState(null); // Khởi tạo user là null
+  const [user, setUser] = useState(null); 
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +28,7 @@ export default function ProfilePage() {
           email: apiUser.email || "Đang cập nhật",
           phone: apiUser.sodienthoai || "Đang cập nhật",
           cccd: apiUser.cccd || "Đang cập nhật",
-          address: "Chưa có dữ liệu địa chỉ trong DB",   // tạm thời chưa có trong database
+          address: apiUser.diachi || "Chưa có dữ liệu địa chỉ trong DB",  
           ngaysinh: apiUser.ngaysinh ? new Date(apiUser.ngaysinh).toISOString().split('T')[0] : "",
           gioitinh: apiUser.gioitinh || "khác",
           role: "Người dân", 
@@ -65,6 +65,7 @@ export default function ProfilePage() {
             sodienthoai: user.phone, 
             email: user.email,
             gioitinh: user.gioitinh.toLowerCase(), 
+            diachi: user.address,
         };
         const response = await axios.put("http://localhost:5000/api/auth/profile", payload, {
             headers: {

@@ -34,4 +34,10 @@ export class nguoidan {
 
     @Column({ type: "boolean", default: true })
     lan_dau_dang_nhap!: boolean;
+
+    @Column({ type: "varchar", length: 255 })
+    diachi!: string;
+
+    @Column({ type: "varchar", length: 255 })
+    anh!: string;
 }
