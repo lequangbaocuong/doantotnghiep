@@ -10,6 +10,9 @@ export default function ReportPage() {
     email: "",
     phone: "",
     address: "",
+    cccd: "", // Thêm
+    gender: "khác", // Thêm
+    anonymous: false, // Thêm
     relation: "",
     crimeType: "",
     severity: "",
@@ -17,6 +20,7 @@ export default function ReportPage() {
     location: "",
     description: "",
     evidence: [],
+    evidenceType: "",
   });
 
   const nextStep = () => setStep((prev) => prev + 1);

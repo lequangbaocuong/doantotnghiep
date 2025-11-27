@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/authController";
-import { verifyToken } from "../middleware/authMiddleware";
+import { AuthController } from "../controllers/auth.controller";
+import { verifyToken } from "../middleware/auth.middleware";
 const router = Router();
 
 // Route đăng nhập

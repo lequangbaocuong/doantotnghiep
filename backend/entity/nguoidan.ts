@@ -1,4 +1,6 @@
-import { Entity, PrimaryColumn, Column } from "typeorm";
+import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm";
+import { chungcu } from "./chungcu";
+import { dontogiac } from "./dontogiac";
 
 export type GioiTinh = "nam" | "nữ" | "khác";
 
@@ -40,4 +42,10 @@ export class nguoidan {
 
     @Column({ type: "varchar", length: 255 })
     anh!: string;
+
+    @OneToMany(() => chungcu, chungcu => chungcu.nguoidan)
+    chungcus!: chungcu[];
+
+    @OneToMany(() => dontogiac, dontogiac => dontogiac.nguoidan)
+    dontogiacs!: dontogiac[];
 }

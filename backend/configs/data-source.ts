@@ -3,8 +3,8 @@ import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
 dotenv.config();
 import { nguoidan } from "../entity/nguoidan";
-
-dotenv.config();
+import { chungcu } from "../entity/chungcu";
+import { dontogiac } from "../entity/dontogiac";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -15,7 +15,11 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE,
     synchronize: false, 
     logging: false,
-    entities: [nguoidan],
+    entities: [
+        nguoidan,
+        chungcu,
+        dontogiac
+    ],
     subscribers: [],
     migrations: [],
 });

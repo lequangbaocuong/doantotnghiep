@@ -1,8 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function ReportStep3({ data, prevStep }) {
-  const handleSubmit = () => {
-    alert("Tố giác/phản ánh của bạn đã được gửi. Cảm ơn sự hợp tác!");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+       if (loading) return;
+
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      Object.keys(data).forEach(key => {
+        if (key !== "files") {
+          formData.append(key, data[key]);
+        }
+      });
+
+      if (data.files && data.files.length > 0) {
+        data.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+
+      const res = await axios.post(
+        "http://localhost:5000/api/submit-report",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" }
+        }
+      );
+
+      alert("Gửi thành công! Mã tố giác: " + res.data.id_togiac);
+
+    } catch (error) {
+      console.error("Lỗi khi gửi tố giác:", error);
+      alert("Không thể gửi tố giác. Vui lòng thử lại!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
