@@ -5,7 +5,7 @@ export type LoaiChungCu = "vật lý" | "phi vật lý";
 
 @Entity("chungcu")
 export class chungcu {
-    @PrimaryColumn({ type: "varchar", length: 6 })
+    @PrimaryColumn({ type: "varchar", length: 10 })
     id_chungcu!: string;
 
     @Column({ length: 255, nullable: true })

@@ -25,4 +25,4 @@ export const uploadEvidence = multer({
             cb(new Error('Định dạng file không hợp lệ!'));
         }
     }
-}).array('evidence', 5);
+}).array('files', 5);

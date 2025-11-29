@@ -25,6 +25,7 @@ export default function ReportStep1({ nextStep, updateFormData, data }) {
       <div className="grid grid-cols-2 gap-4 mt-4">
         <input name="cccd" placeholder="Số CCCD/CMND" value={form.cccd} onChange={handleChange} className="border p-2 rounded" />
         <select name="gender" value={form.gender} onChange={handleChange} className="border p-2 rounded">
+          <option value="khác">Giới tính</option>
           <option value="nam">Nam</option>
           <option value="nữ">Nữ</option>
           <option value="khác">Khác</option>
@@ -35,9 +36,8 @@ export default function ReportStep1({ nextStep, updateFormData, data }) {
         <label className="block font-medium mb-2">Mối quan hệ với vụ việc</label>
         <select name="relation" value={form.relation} onChange={handleChange} className="border p-2 rounded w-full">
           <option value="">-- Chọn --</option>
-          <option value="Nhân chứng">Nhân chứng</option>
-          <option value="Nạn nhân">Nạn nhân</option>
-          <option value="Nghi phạm">Nghi phạm</option>
+          <option value="nhân chứng">Nhân chứng</option>
+          <option value="nạn nhân">Nạn nhân</option>
         </select>
       </div>
 
