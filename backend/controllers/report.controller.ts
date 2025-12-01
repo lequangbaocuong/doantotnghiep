@@ -87,5 +87,40 @@ export const reportController = {
                 message: 'Lỗi server: Không thể gửi tố giác.' 
             });
         }
+    },
+
+    async getAllReports(req: Request, res: Response) {
+        try {
+            const reportRepo = AppDataSource.getRepository(dontogiac);
+            
+            // Lấy tất cả, sắp xếp ngày gửi mới nhất lên đầu
+            const reports = await reportRepo.find({
+                order: { ngaygui: "DESC" }
+            });
+
+            return res.status(200).json(reports);
+        } catch (error) {
+            console.error("Lỗi lấy danh sách tố giác:", error);
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+    },
+
+    async getReportDetail(req: Request, res: Response) {
+        try {
+            const { id } = req.params; 
+            const reportRepo = AppDataSource.getRepository(dontogiac);
+            const report = await reportRepo.findOne({
+                where: { id_togiac: id },
+                relations: ["nguoidan"] 
+            });
+
+            if (!report) {
+                return res.status(404).json({ message: "Không tìm thấy đơn tố giác này" });
+            }
+            return res.status(200).json(report);
+        } catch (error) {
+            console.error("Lỗi lấy chi tiết tố giác:", error);
+            return res.status(500).json({ message: "Lỗi server" });
+        }
     }
 };

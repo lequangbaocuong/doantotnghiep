@@ -5,6 +5,7 @@ import * as dotenv from "dotenv";
 import { AppDataSource } from "./configs/data-source";
 import authRoutes from "./routes/auth.route";
 import reportRoutes from "./routes/report.route";
+import caseRoutes from "./routes/case.route";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/cases", caseRoutes);
 app.use("/api/report", reportRoutes);  
 
 AppDataSource.initialize()

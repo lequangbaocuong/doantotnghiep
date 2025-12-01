@@ -17,7 +17,8 @@ import PhanCongDieuTra from "../pages/congan/PhanCongDieuTra";
 import DuyetTruyNa from "../pages/congan/DuyetTruyNa";
 import ForgotPassword from "../pages/ForgotPassword";
 import ChangePassword from "../pages/ChangePassword";
-//import LoginSuccess from "../components/LoginSuccess";
+import DanhSachToGiac from "../pages/congan/DanhSachToGiac";
+import ChiTietToGiac from "../pages/congan/ChiTietToGiac";
 export default function AppRoutes() {
     return (  
         <Routes>
@@ -38,6 +39,8 @@ export default function AppRoutes() {
             <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/congan/danhsachtogiac" element={<DanhSachToGiac />} />
+            <Route path="/congan/danhsachtogiac/:id" element={<ChiTietToGiac />} />
         </Routes>
     );
 }
