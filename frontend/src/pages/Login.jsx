@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthLayout from "../components/auth_layout.jsx";
+import AuthLayout from "../layouts/auth_layout";
 import axios from "axios";
 import LoginSuccess from "../components/LoginSuccess.jsx";
 

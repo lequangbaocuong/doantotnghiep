@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthLayout from "../components/auth_layout.jsx";
+import AuthLayout from "../layouts/auth_layout";
 
 export default function ForgotPassword() {
   const [cccd, setCccd] = useState("");

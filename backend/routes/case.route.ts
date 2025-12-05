@@ -5,5 +5,6 @@ import { caseController } from '../controllers/case.controller';
 const router = Router();
 
 router.get('/', caseController.getAllCases);
+router.post('/create', caseController.createCase);
 
 export default router;

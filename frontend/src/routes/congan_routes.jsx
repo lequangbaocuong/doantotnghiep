@@ -1,0 +1,49 @@
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+
+import CongAnLayout from "../layouts/CongAn_mainLayout"; 
+import ThuTruongLayout from "../layouts/ThuTruong_mainLayout";
+
+import CongAnPhuong from "../pages/congan/CongAnPhuong";
+import ThuTruongDonVi from "../pages/congan/ThuTruong";
+import CongAn_CaseLists from "../pages/congan/CongAn_CaseLists";
+import DangTaiTruyNa from "../pages/congan/DangTaiTruyNa";
+import TaoHoSoVuAn from "../pages/congan/TaoHoSoVuAn";
+import PhanTichVuAn from "../pages/congan/PhanTichVuAn";
+import PhanCongDieuTra from "../pages/congan/PhanCongDieuTra";
+import DuyetTruyNa from "../pages/congan/DuyetTruyNa";
+import DanhSachToGiac from "../pages/congan/DanhSachToGiac";
+import ChiTietToGiac from "../pages/congan/ChiTietToGiac";
+import LoginCanBo from "../pages/congan/CongAn_DangNhap"; 
+
+import ProtectedRouteCanBo from "../components/ProtectedRoute_Canbo";
+
+export default function Congan_Routes() {
+    return (  
+        <Routes>
+            {/* route không cần login */}
+            <Route path="/congan/login" element={<LoginCanBo />} />
+
+            {/* ----- Các route Công An cần login ----- */}
+            <Route element={<ProtectedRouteCanBo />}>
+
+                <Route element={<CongAnLayout />}>
+                    <Route path="/congan" element={<CongAnPhuong />} /> 
+                    <Route path="/congan/caselists" element={<CongAn_CaseLists />} />
+                    <Route path="/congan/dangtaitruyna" element={<DangTaiTruyNa />} />
+                    <Route path="/congan/taohosovuan" element={<TaoHoSoVuAn />} />
+                    <Route path="/congan/danhsachtogiac" element={<DanhSachToGiac />} />
+                    <Route path="/congan/danhsachtogiac/:id" element={<ChiTietToGiac />} />
+                </Route>
+
+                {/* Thu trưởng cũng phải đăng nhập */}
+                <Route element={<ThuTruongLayout />}>
+                    <Route path="/thutruong" element={<ThuTruongDonVi />} />
+                    <Route path="/thutruong/phan-tich-vu-an" element={<PhanTichVuAn />} />
+                    <Route path="/thutruong/phan-cong-dieu-tra" element={<PhanCongDieuTra />} />
+                    <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
+                </Route>
+            </Route>
+        </Routes>
+    );
+}

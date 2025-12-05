@@ -41,7 +41,6 @@ export default function ChiTietToGiac() {
     );
   }
 
-  // Helper function để hiển thị màu trạng thái
   const getStatusColor = (status) => {
     switch (status) {
       case "chưa xử lý": return "text-yellow-400 border-yellow-400 bg-yellow-400/10";
@@ -52,9 +51,21 @@ export default function ChiTietToGiac() {
     }
   };
 
+  const handleCreateCase = () => {
+    navigate('/congan/taohosovuan', { 
+      state: { 
+        prefillData: {
+          id_togiac: data.id_togiac,
+          tieude: data.tieude,
+          noidung: data.noidung,
+          mucdo: data.loaitoipham 
+        }
+      } 
+    });
+  };
+
   return (
     <div className="min-h-screen bg-[#0f1a26] text-white p-6 md:p-10">
-      {/* Header & Back Button */}
       <div className="max-w-5xl mx-auto">
         <button
           className="flex items-center gap-2 text-gray-400 hover:text-white mb-6 transition"
@@ -78,10 +89,7 @@ export default function ChiTietToGiac() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* CỘT TRÁI: Nội dung chính (Chiếm 2 phần) */}
           <div className="lg:col-span-2 space-y-6">
-            
-            {/* 1. Thông tin vụ việc */}
             <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-[#4ECDC4]">
                 <FileText /> Nội dung vụ việc
@@ -105,43 +113,41 @@ export default function ChiTietToGiac() {
                 </div>
 
                 <div>
-                   <label className="text-gray-400 text-xs uppercase font-bold">Nội dung chi tiết</label>
-                   <div className="bg-[#0f1a26] p-4 rounded-lg mt-1 text-gray-300 leading-relaxed whitespace-pre-line border border-gray-700">
-                     {data.noidung}
-                   </div>
+                  <label className="text-gray-400 text-xs uppercase font-bold">Nội dung chi tiết</label>
+                    <div className="bg-[#0f1a26] p-4 rounded-lg mt-1 text-gray-300 leading-relaxed whitespace-pre-line border border-gray-700">
+                      {data.noidung}
+                    </div>
                 </div>
               </div>
             </div>
 
-            {/* 2. Thời gian & Địa điểm */}
             <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700">
-               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-[#FFD93D]">
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-[#FFD93D]">
                 <Clock /> Thời gian & Địa điểm
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                   <p className="text-gray-400 text-sm mb-1">Thời gian gửi đơn</p>
-                   <p className="font-medium text-white">{new Date(data.ngaygui).toLocaleString('vi-VN')}</p>
+                  <p className="text-gray-400 text-sm mb-1">Thời gian gửi đơn</p>
+                  <p className="font-medium text-white">{new Date(data.ngaygui).toLocaleString('vi-VN')}</p>
                 </div>
                 <div>
-                   <p className="text-gray-400 text-sm mb-1">Thời gian xảy ra sự việc</p>
-                   <p className="font-medium text-white">
-                      {data.ngayxayra ? new Date(data.ngayxayra).toLocaleDateString('vi-VN') : "Không rõ"}
-                   </p>
+                  <p className="text-gray-400 text-sm mb-1">Thời gian xảy ra sự việc</p>
+                  <p className="font-medium text-white">
+                    {data.ngayxayra ? new Date(data.ngayxayra).toLocaleDateString('vi-VN') : "Không rõ"}
+                  </p>
                 </div>
                 <div className="md:col-span-2">
-                   <p className="text-gray-400 text-sm mb-1">Địa điểm xảy ra</p>
-                   <p className="font-medium text-white flex items-center gap-2">
-                     <MapPin className="text-[#ff5252]" size={18}/> {data.diachivuviec}
-                   </p>
+                  <p className="text-gray-400 text-sm mb-1">Địa điểm xảy ra</p>
+                  <p className="font-medium text-white flex items-center gap-2">
+                    <MapPin className="text-[#ff5252]" size={18}/> {data.diachivuviec}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* CỘT PHẢI: Thông tin người gửi (Chiếm 1 phần) */}
           <div className="space-y-6">
-             <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700 h-full">
+              <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700 h-full">
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-[#A29BFE]">
                   <User /> Người báo tin
                 </h2>
@@ -180,20 +186,21 @@ export default function ChiTietToGiac() {
                     </div>
                   </div>
                 )}
-             </div>
+              </div>
 
-             {/* Khu vực Action (Dành cho Admin) */}
-             <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700">
+              <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700">
                 <h2 className="text-sm font-bold text-gray-400 uppercase mb-4">Tác vụ quản lý</h2>
-                <div className="flex flex-col gap-3">
-                   <button className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-medium transition">
+                  <div className="flex flex-col gap-3">
+                    <button className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-medium transition">
                       Cập nhật trạng thái
-                   </button>
-                   <button className="w-full bg-[#ff5252] hover:bg-red-700 py-2 rounded text-white font-medium transition">
+                    </button>
+                    <button
+                      onClick={handleCreateCase} 
+                      className="w-full bg-[#ff5252] hover:bg-red-700 py-2 rounded text-white font-medium transition">
                       Tạo hồ sơ vụ án từ tin này
-                   </button>
+                    </button>
                 </div>
-             </div>
+              </div>
           </div>
         </div>
       </div>

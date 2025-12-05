@@ -5,6 +5,8 @@ dotenv.config();
 import { nguoidan } from "../entity/nguoidan";
 import { chungcu } from "../entity/chungcu";
 import { dontogiac } from "../entity/dontogiac";
+import { canbo } from "../entity/canbo";
+import { hosovuan } from "../entity/hosovuan";
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -18,7 +20,9 @@ export const AppDataSource = new DataSource({
     entities: [
         nguoidan,
         chungcu,
-        dontogiac
+        dontogiac,
+        canbo,
+        hosovuan
     ],
     subscribers: [],
     migrations: [],

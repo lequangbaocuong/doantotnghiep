@@ -26,3 +26,19 @@ export const uploadEvidence = multer({
         }
     }
 }).array('files', 5);
+
+export const uploadWanted = multer({
+    storage,
+    limits: { 
+        fileSize: 5 * 1024 * 1024, // 5MB
+        files: 5,
+    },
+    fileFilter: (req, file, cb) => {
+        // Chỉ chấp nhận các định dạng ảnh, video, pdf phổ biến
+        if (file.mimetype.match(/jpeg|jpg|png|gif|mp4|mov|pdf/)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Định dạng file không hợp lệ!'));
+        }
+    }
+}).single('anh');

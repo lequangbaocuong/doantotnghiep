@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../configs/data-source";
 import { nguoidan } from "../entity/nguoidan";
+import { canbo } from "../entity/canbo";
 //import * as bcrypt from "bcryptjs"; chưa mã hóa mật khẩu, chỉ test api
 import * as jwt from "jsonwebtoken";
 
@@ -50,6 +51,7 @@ export class AuthController {
             return res.status(500).json({ message: "Lỗi server nội bộ" });
         }
     };
+
     static changePassword = async (req: Request, res: Response) => {
         const userId = (req as any).userPayload.id;
         const { matkhauCu, matkhauMoi } = req.body;
@@ -169,6 +171,59 @@ export class AuthController {
 
         } catch (error) {
             console.error(error);
+            return res.status(500).json({ message: "Lỗi server nội bộ" });
+        }
+    };
+
+    static loginCanBo = async (req: Request, res: Response) => {
+        const { email, matkhau } = req.body;
+
+        // 1. Kiểm tra đầu vào
+        if (!email || !matkhau) {
+            return res.status(400).json({ message: "Vui lòng nhập Email và Mật khẩu!" });
+        }
+
+        const canboRepo = AppDataSource.getRepository(canbo);
+
+        try {
+            // 2. Tìm cán bộ theo email
+            const user = await canboRepo.findOne({
+                where: { email: email }
+            });
+
+            // 3. Kiểm tra tồn tại
+            if (!user) {
+                return res.status(401).json({ message: "Email không tồn tại trong hệ thống!" });
+            }
+
+            // 4. Kiểm tra mật khẩu (So sánh chuỗi thường vì chưa có bcrypt)
+            if (user.matkhau !== matkhau) {
+                return res.status(401).json({ message: "Mật khẩu không chính xác!" });
+            }
+
+            // 5. Tạo Token
+            const token = jwt.sign(
+                { 
+                    id_canbo: user.id_canbo, 
+                    role: "congan",      // Đánh dấu role là công an
+                    id_vaitro: user.id_vaitro // Quan trọng để phân quyền Thủ trưởng/Cán bộ
+                },
+                process.env.JWT_SECRET || "secret",
+                { expiresIn: "24h" }
+            );
+
+            // 6. Trả về kết quả (Loại bỏ mật khẩu)
+            const { matkhau: _, ...userData } = user;
+
+            return res.status(200).json({
+                success: true,
+                message: "Đăng nhập cán bộ thành công!",
+                token: token,
+                user: userData // Frontend sẽ dùng user.id_vaitro để điều hướng
+            });
+
+        } catch (error) {
+            console.error("Lỗi đăng nhập cán bộ:", error);
             return res.status(500).json({ message: "Lỗi server nội bộ" });
         }
     };

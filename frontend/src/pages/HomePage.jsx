@@ -1,4 +1,20 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 function TrangChu() {
+
+  const navigate = useNavigate(); 
+
+  const handleNavigate = (path) => {
+    const token = localStorage.getItem("token");
+    if (!token && (path === '/report' || path === '/cases')) {
+        alert("Bạn cần đăng nhập để sử dụng chức năng này!");
+        navigate('/login');
+    } else {
+        navigate(path);
+    }
+  };
+
   return (
     <div className="App">
       {/* Nội dung chính */}
@@ -25,12 +41,11 @@ function TrangChu() {
                 Người dân có thể gửi thông tin, hình ảnh, hoặc bằng chứng về các hành vi phạm tội, vi phạm pháp luật.
               </p>
               <button className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800"
-              type="button" onClick={() => window.location.href='/report'}
+                type="button" onClick={() => handleNavigate('/report')}
               >
                 Gửi tố giác ngay
               </button>
             </div>
-
             {/* Tra cứu vụ án */}
             <div className="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
               <h2 className="text-xl font-semibold text-blue-700 mb-3">
@@ -40,12 +55,11 @@ function TrangChu() {
                 Cán bộ và người dân có thể xem thông tin về các vụ án đang điều tra, và gửi chứng cứ cần thiết để phục vụ mục đích điều tra
               </p>
               <button className="bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800"
-              type="button" onClick={() => window.location.href='/cases'}
+                type="button" onClick={() => handleNavigate('/cases')}
               >
                 Xem danh sách vụ án
               </button>
             </div>
-
             {/* Thống kê an ninh */}
             <div className="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
               <h2 className="text-xl font-semibold text-blue-700 mb-3">

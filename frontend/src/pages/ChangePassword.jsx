@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Lock } from "lucide-react";
-import AuthLayout from "../components/auth_layout.jsx";
+import AuthLayout from "../layouts/auth_layout";
 import axios from "axios";
 
 export default function ChangePassword() {

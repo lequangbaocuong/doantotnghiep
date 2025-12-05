@@ -2,19 +2,21 @@ import React from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import AppRoutes from "./routes/AppRoutes";
-import AdminRoutes from "./pages/admin/routes/admin_routes" // import routes riêng của admin
+import AppRoutes from "./routes/AppRoutes"; // Route của dân
+import Congan_Routes from "./routes/congan_routes";
 
 function AppContent() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith("/admin");
+  
+  const isInternalApp = 
+      location.pathname.startsWith("/congan") || 
+      location.pathname.startsWith("/thutruong") ||
+      location.pathname.startsWith("/admin"); 
 
-  // Nếu đang ở /admin thì chỉ hiển thị layout admin
-  if (isAdminRoute) {
-    return <AdminRoutes />;
+  if (isInternalApp) {
+    return <Congan_Routes />;
   }
-
-  // Còn lại hiển thị layout của trang thường
+  
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
