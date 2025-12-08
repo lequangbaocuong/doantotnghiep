@@ -15,6 +15,9 @@ import DuyetTruyNa from "../pages/congan/DuyetTruyNa";
 import DanhSachToGiac from "../pages/congan/DanhSachToGiac";
 import ChiTietToGiac from "../pages/congan/ChiTietToGiac";
 import LoginCanBo from "../pages/congan/CongAn_DangNhap"; 
+import ThemNghiPham from "../pages/congan/ThemNghiPham";
+import ChiTietVuAn from "../pages/congan/ChiTietVuAn";
+import ChiTietNghiPham from "../pages/congan/ChiTietNghiPham";
 
 import ProtectedRouteCanBo from "../components/ProtectedRoute_Canbo";
 
@@ -30,10 +33,13 @@ export default function Congan_Routes() {
                 <Route element={<CongAnLayout />}>
                     <Route path="/congan" element={<CongAnPhuong />} /> 
                     <Route path="/congan/caselists" element={<CongAn_CaseLists />} />
+                    <Route path="/congan/themnghipham" element={<ThemNghiPham />} />
                     <Route path="/congan/dangtaitruyna" element={<DangTaiTruyNa />} />
                     <Route path="/congan/taohosovuan" element={<TaoHoSoVuAn />} />
                     <Route path="/congan/danhsachtogiac" element={<DanhSachToGiac />} />
                     <Route path="/congan/danhsachtogiac/:id" element={<ChiTietToGiac />} />
+                    <Route path="/congan/chitietvuan/:id" element={<ChiTietVuAn />} />
+                    <Route path="/congan/nghipham/:id" element={<ChiTietNghiPham />} />
                 </Route>
 
                 {/* Thu trưởng cũng phải đăng nhập */}

@@ -6,7 +6,9 @@ import { AppDataSource } from "./configs/data-source";
 import authRoutes from "./routes/auth.route";
 import reportRoutes from "./routes/report.route";
 import caseRoutes from "./routes/case.route";
-
+import suspectRoutes from "./routes/suspect.route";
+import wantedRoutes from "./routes/wanted.route";
+import assignmentRoutes from "./routes/assignment.route";
 dotenv.config();
 
 const app = express();
@@ -20,6 +22,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/cases", caseRoutes);
 app.use("/api/report", reportRoutes);  
+app.use("/api/suspects", suspectRoutes);
+app.use("/api/wanted", wantedRoutes);
+app.use("/api/assignments", assignmentRoutes);
 
 AppDataSource.initialize()
     .then(() => {

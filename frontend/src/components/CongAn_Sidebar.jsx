@@ -6,11 +6,9 @@ export default function SidebarCongAn() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // 1. Xóa thông tin đăng nhập của cán bộ
     localStorage.removeItem("token_canbo");
     localStorage.removeItem("user_canbo");
     
-    // 2. Điều hướng về trang chủ (của người dân)
     navigate("/");
   };
 
@@ -36,17 +34,8 @@ export default function SidebarCongAn() {
           <Search className="w-6 h-6" />
           <span>Xem hồ sơ vụ án</span>
         </Link>
-
-        <Link
-          to="/congan/dangtaitruyna"
-          className="flex items-center gap-3 p-3 bg-[#0f1a26] rounded-lg hover:bg-[#FF6B6B] transition"
-        >
-          <Upload className="w-6 h-6" />
-          <span>Đăng tải truy nã</span>
-        </Link>
       </nav>
 
-      {/* Phần Footer của Sidebar: Nút Đăng xuất */}
       <div className="mt-auto border-t border-gray-700 pt-4 space-y-3">
         <button 
           onClick={handleLogout}

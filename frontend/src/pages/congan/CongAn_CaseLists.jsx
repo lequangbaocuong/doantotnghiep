@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Edit3, Send, AlertTriangle } from "lucide-react";
+import { Edit3, Send, AlertTriangle, UserPlus } from "lucide-react";
 import axios from "axios";
-import { Link } from "react-router-dom"; // Nếu muốn link tới chi tiết
+import { Link, useNavigate } from "react-router-dom"; // Nếu muốn link tới chi tiết
 
 export default function CongAn_CaseLists() {
+  const navigate = useNavigate();
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,15 +30,13 @@ export default function CongAn_CaseLists() {
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "Chưa rõ"; // Xử lý nếu null/undefined
+    if (!dateString) return "Chưa rõ"; 
     const date = new Date(dateString);
-    // Kiểm tra nếu date không hợp lệ
     if (isNaN(date.getTime())) return dateString; 
-    return date.toLocaleDateString('vi-VN'); // Format kiểu VN: dd/mm/yyyy
+    return date.toLocaleDateString('vi-VN'); 
   };
-  // Hàm xử lý màu sắc trạng thái
+  
   const getStatusColor = (status) => {
-    // Chuẩn hóa text về chữ thường để so sánh
     const s = status?.toLowerCase() || "";
     if (s.includes("hoàn tất") || s.includes("đã xử lý")) return "text-green-400";
     if (s.includes("đang")) return "text-blue-400";
@@ -45,7 +44,6 @@ export default function CongAn_CaseLists() {
     return "text-gray-400";
   };
   
-  // Hàm xử lý màu mức độ
   const getLevelColor = (level) => {
       const l = level?.toLowerCase() || "";
       if(l.includes("đặc biệt")) return "text-red-600 font-bold";
@@ -65,12 +63,6 @@ export default function CongAn_CaseLists() {
             <h2 className="text-xl font-semibold text-[#ff5252]">
             Hồ sơ đang quản lý
             </h2>
-            <button 
-                onClick={() => window.location.href='/congan/taohosovuan'}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm transition"
-            >
-                + Thêm vụ án mới
-            </button>
         </div>
 
         <div className="overflow-x-auto">
@@ -124,7 +116,23 @@ export default function CongAn_CaseLists() {
                         >
                           <Send className="w-4 h-4" />
                         </button>
+
+                        <button
+                          title="Thêm nghi phạm"
+                          onClick={() => {
+                              navigate('/congan/themnghipham', { state: { id_vuan: vuAn.id_vuan, tenvuan: vuAn.tenvuan } });
+                          }}
+                          className="bg-[#2e4a68] hover:bg-[#3d5e82] text-red-400 p-2 rounded-md transition"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                        </button>
                       </div>
+                    </td>
+
+                    <td className="px-4 py-3 font-medium text-white cursor-pointer hover:text-[#ff5252]"
+                      onClick={() => navigate(`/congan/chitietvuan/${vuAn.id_vuan}`)}
+                    >
+                      Chi tiết
                     </td>
                   </tr>
                 ))

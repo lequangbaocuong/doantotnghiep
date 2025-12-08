@@ -3,6 +3,7 @@ import { AppDataSource } from '../configs/data-source';
 import { hosovuan } from '../entity/hosovuan';
 import { dontogiac } from '../entity/dontogiac';
 import { generateId } from '../utils/idreport.util';
+import { canbo } from '../entity/canbo';
 
 export const caseController = {
     async getAllCases(req: Request, res: Response) {
@@ -80,6 +81,73 @@ export const caseController = {
         } catch (error) {
             console.error("Lỗi tạo vụ án:", error);
             return res.status(500).json({ message: "Lỗi server khi tạo vụ án" });
+        }
+    },
+
+    async getCaseDetail(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            console.log("Đang tìm vụ án với ID:", id);
+            const caseRepo = AppDataSource.getRepository(hosovuan);
+
+            const caseDetail = await caseRepo.findOne({
+                where: { id_vuan: id },
+                relations: ["ds_nghipham", "dontogiac", "canbo"] // Lấy kèm Nghi phạm, Đơn tố giác, Cán bộ
+            });
+
+            if (!caseDetail) {
+                return res.status(404).json({ message: "Không tìm thấy vụ án" });
+            }
+
+            return res.status(200).json(caseDetail);
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+    },
+
+    async assignOfficer(req: Request, res: Response) {
+        try {
+            const { id } = req.params; 
+            const { id_canbo } = req.body; 
+
+            const caseRepo = AppDataSource.getRepository(hosovuan);
+            
+            const existingCase = await caseRepo.findOneBy({ id_vuan: id });
+            if (!existingCase) {
+                return res.status(404).json({ message: "Không tìm thấy vụ án!" });
+            }
+
+            existingCase.id_canbo = id_canbo;
+
+            await caseRepo.save(existingCase);
+
+            return res.status(200).json({ 
+                success: true,
+                message: "Phân công điều tra viên thành công!",
+                data: existingCase
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server khi phân công" });
+        }
+    },
+
+    async getInvestigators(req: Request, res: Response) {
+        try {
+            const canboRepo = AppDataSource.getRepository(canbo);
+            
+            // Giả sử mã VT003 là cán bộ điều tra (dựa theo file SQL bạn gửi)
+            const investigators = await canboRepo.find({
+                where: { id_vaitro: 'VT003' },
+                select: ['id_canbo', 'hoten', 'email'] // Chỉ lấy các trường cần thiết
+            });
+
+            return res.status(200).json(investigators);
+        } catch (error) {
+            return res.status(500).json({ message: "Lỗi lấy danh sách cán bộ" });
         }
     }
 };

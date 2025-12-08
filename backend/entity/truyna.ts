@@ -6,7 +6,7 @@ export type MucDo = 'ít nghiêm trọng' | 'nghiêm trọng' | 'rất nghiêm t
 
 @Entity("truyna")
 export class truyna {
-    @PrimaryColumn({ type: "varchar", length: 10 }) // Nên thống nhất length 10 như các bảng khác
+    @PrimaryColumn({ type: "varchar", length: 10 }) 
     id_truyna!: string;
 
     @Column({ type: "varchar", length: 100 })

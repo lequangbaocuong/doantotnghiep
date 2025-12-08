@@ -1,6 +1,7 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { dontogiac } from "./dontogiac";
 import { canbo } from "./canbo";
+import { nghipham } from "./nghipham";
 
 export type MucDo = 'ít nghiêm trọng' | 'nghiêm trọng' | 'rất nghiêm trọng' | 'đặc biệt nghiêm trọng';
 
@@ -43,5 +44,8 @@ export class hosovuan {
     @ManyToOne(() => canbo, (canbo) => canbo.ds_hosovuan)
     @JoinColumn({ name: "id_canbo" })
     canbo!: canbo;
+
+    @OneToMany(() => nghipham, (np) => np.hosovuan)
+    ds_nghipham!: nghipham[];
 }
 
