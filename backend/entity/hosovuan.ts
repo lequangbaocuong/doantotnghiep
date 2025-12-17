@@ -2,6 +2,7 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, OneToMany } from 
 import { dontogiac } from "./dontogiac";
 import { canbo } from "./canbo";
 import { nghipham } from "./nghipham";
+import { chungcu } from "./chungcu";
 
 export type MucDo = 'ít nghiêm trọng' | 'nghiêm trọng' | 'rất nghiêm trọng' | 'đặc biệt nghiêm trọng';
 
@@ -47,5 +48,8 @@ export class hosovuan {
 
     @OneToMany(() => nghipham, (np) => np.hosovuan)
     ds_nghipham!: nghipham[];
+
+    @OneToMany(() => chungcu, (cc) => cc.hosovuan)
+    ds_chungcu!: chungcu[];
 }
 

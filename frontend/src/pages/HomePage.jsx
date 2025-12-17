@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import WantedSection from "../components/WantedSection";
 
 function TrangChu() {
 
@@ -76,32 +77,8 @@ function TrangChu() {
             </div>
           </div>
 
-          {/* Tin tức & cảnh báo */}
-          <div className="mt-16">
-            <h2 className="text-2xl font-bold text-blue-800 mb-6">
-              Tin tức & Cảnh báo truy nã
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className="bg-white shadow rounded-2xl p-4 hover:shadow-lg transition"
-                >
-                  <img
-                    src={`https://picsum.photos/seed/${item}/400/200`}
-                    alt="tin tuc"
-                    className="rounded-lg mb-3"
-                  />
-                  <h3 className="font-semibold text-gray-800 mb-2">
-                    Tiêu đề bản tin {item}
-                  </h3>
-                  <p className="text-gray-600 text-sm">
-                    Mô tả ngắn về vụ án hoặc cảnh báo truy nã... (có thể cập nhật từ cơ sở dữ liệu sau này)
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <WantedSection />
+          
         </section>
       </main>
     </div>

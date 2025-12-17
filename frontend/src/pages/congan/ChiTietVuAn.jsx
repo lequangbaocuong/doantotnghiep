@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, User, MapPin, Calendar, FileText, UserPlus } from "lucide-react";
+import { ArrowLeft, User, MapPin, Calendar, FileText, UserPlus, Paperclip, Download, Image, Video } from "lucide-react";
 import axios from "axios";
 
 export default function ChiTietVuAn() {
@@ -153,6 +153,49 @@ export default function ChiTietVuAn() {
                     <p className="text-gray-500 text-sm italic">Vụ án được khởi tố trực tiếp, không qua đơn tố giác.</p>
                 )}
             </div>
+        </div>
+
+        <div className="bg-[#1b2838] p-6 rounded-xl border border-gray-700 mt-6">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-[#f9ca24]">
+                <Paperclip size={20}/> Tài liệu & Chứng cứ thu thập
+            </h2>
+
+            {vuAn.ds_chungcu && vuAn.ds_chungcu.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {vuAn.ds_chungcu.map((cc) => (
+                        <div key={cc.id_chungcu} className="bg-[#0f1a26] p-3 rounded border border-gray-600 flex gap-3 hover:border-[#f9ca24] transition group">
+                            {/* Icon loại file */}
+                            <div className="w-12 h-12 flex items-center justify-center bg-gray-700 rounded text-gray-400 shrink-0">
+                                {cc.loaichungcu === 'hình ảnh' ? <Image size={24}/> : 
+                                cc.loaichungcu === 'video' ? <Video size={24}/> : <FileText size={24}/>}
+                            </div>
+
+                            <div className="overflow-hidden flex-1">
+                                <p className="font-bold text-sm text-white truncate capitalize">{cc.loaichungcu}</p>
+                                <p className="text-xs text-gray-400 line-clamp-1">{cc.mota}</p>
+                                <p className="text-[10px] text-gray-500 mt-1">
+                                    Ngày gửi: {new Date(cc.ngaygui).toLocaleDateString('vi-VN')}
+                                </p>
+                            </div>
+
+                            {/* Nút tải/xem */}
+                            <a 
+                                href={`http://localhost:5000${cc.duongdantaptin}`} 
+                                target="_blank" 
+                                rel="noreferrer"
+                                className="flex items-center justify-center w-8 h-8 rounded-full bg-[#f9ca24] text-black opacity-0 group-hover:opacity-100 transition"
+                                title="Xem/Tải xuống"
+                            >
+                                <Download size={16}/>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-6 text-gray-500 border border-dashed border-gray-600 rounded-lg text-sm">
+                    Chưa có chứng cứ nào được ghi nhận.
+                </div>
+            )}
         </div>
       </div>
     </div>

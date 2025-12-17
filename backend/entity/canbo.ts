@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryColumn, Column, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 import { hosovuan } from "./hosovuan"; 
+import { vaitro } from "./vaitro";
 
 export type GioiTinh = "nam" | "nữ" | "khác";
 
@@ -44,4 +45,8 @@ export class canbo {
 
     @OneToMany(() => hosovuan, (hosovuan) => hosovuan.id_canbo)
     ds_hosovuan!: hosovuan[];
+
+    @ManyToOne(() => vaitro, (vt) => vt.ds_canbo)
+    @JoinColumn({ name: "id_vaitro" }) // Tên cột trong DB là id_vaitro
+    vaitro!: vaitro;
 }

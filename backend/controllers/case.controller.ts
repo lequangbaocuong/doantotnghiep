@@ -92,7 +92,7 @@ export const caseController = {
 
             const caseDetail = await caseRepo.findOne({
                 where: { id_vuan: id },
-                relations: ["ds_nghipham", "dontogiac", "canbo"] // Lấy kèm Nghi phạm, Đơn tố giác, Cán bộ
+                relations: ["ds_nghipham", "dontogiac", "canbo", "ds_chungcu"]
             });
 
             if (!caseDetail) {
@@ -139,10 +139,10 @@ export const caseController = {
         try {
             const canboRepo = AppDataSource.getRepository(canbo);
             
-            // Giả sử mã VT003 là cán bộ điều tra (dựa theo file SQL bạn gửi)
+           
             const investigators = await canboRepo.find({
                 where: { id_vaitro: 'VT003' },
-                select: ['id_canbo', 'hoten', 'email'] // Chỉ lấy các trường cần thiết
+                select: ['id_canbo', 'hoten', 'email'] 
             });
 
             return res.status(200).json(investigators);

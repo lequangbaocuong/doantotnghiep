@@ -96,5 +96,56 @@ export const truynaController = {
             console.error(error);
             return res.status(500).json({ message: "Lỗi server khi duyệt" });
         }
+    },
+
+    async getPublicList(req: Request, res: Response) {
+        try {
+            const repo = AppDataSource.getRepository(truyna);
+            const list = await repo.find({
+                where: { trangthai: 'đã duyệt' }, 
+                order: { ngayduyet: 'DESC' },     
+                take: 6                          
+            });
+            return res.json(list);
+        } catch (e) { return res.status(500).json({ message: "Lỗi lấy dữ liệu" }); }
+    },
+
+    async delete(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            await AppDataSource.getRepository(truyna).delete(id);
+            return res.json({ message: "Đã xóa bài đăng truy nã" });
+        } catch (e) { return res.status(500).json({ message: "Lỗi xóa bài" }); }
+    },
+
+    async getApproved(req: Request, res: Response) {
+        try {
+            const repo = AppDataSource.getRepository(truyna);
+            const list = await repo.find({
+                where: { trangthai: 'đã duyệt' }, 
+                order: { ngayduyet: 'DESC' },     
+                take: 6                           
+            });
+            return res.json(list);
+        } catch (e) { return res.status(500).json({ message: "Lỗi lấy dữ liệu" }); }
+    },
+
+    async getAllWanted(req: Request, res: Response) {
+        try {
+            const repo = AppDataSource.getRepository(truyna);
+            const list = await repo.find({
+                order: { ngayduyet: 'DESC' }
+            });
+            return res.json(list);
+        } catch (e) { return res.status(500).json({ message: "Lỗi server" }); }
+    },
+
+    async deleteWanted(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const repo = AppDataSource.getRepository(truyna);
+            await repo.delete(id);
+            return res.json({ message: "Đã xóa bài đăng!" });
+        } catch (e) { return res.status(500).json({ message: "Lỗi xóa" }); }
     }
 };

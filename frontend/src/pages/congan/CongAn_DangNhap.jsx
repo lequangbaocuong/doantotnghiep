@@ -23,8 +23,10 @@ export default function LoginCanBo() {
       
       if (user.id_vaitro === 'VT002') { 
           window.location.href = "/thutruong";
-      } else {
+      } else if (user.id_vaitro === 'VT003') {
           window.location.href = "/congan";
+      } else {
+          window.location.href = "/admin/dashboard";
       }
 
     } catch (err) {

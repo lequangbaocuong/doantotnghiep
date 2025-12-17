@@ -1,5 +1,6 @@
-import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm"; 
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm"; 
 import { nguoidan } from "./nguoidan";
+import { hosovuan } from "./hosovuan";
 
 export type LoaiChungCu = "vật lý" | "phi vật lý";
 
@@ -11,11 +12,8 @@ export class chungcu {
     @Column({ length: 255, nullable: true })
     duongdantaptin!: string;
 
-    @Column({ 
-        type: 'enum', 
-        enum: ['vật lý', 'phi vật lý'] 
-    })
-    loaichungcu!: LoaiChungCu;
+    @Column({ type: "varchar", length: 50})
+    loaichungcu!: string;
 
     @Column({ type: 'text', nullable: true })
     mota!: string;
@@ -29,4 +27,14 @@ export class chungcu {
     @ManyToOne(() => nguoidan)
     @JoinColumn({ name: "id_nguoidan" })
     nguoidan!: nguoidan;
+
+    @Column({ type: "varchar", length: 10 })
+    id_vuan!: string;
+
+    @ManyToOne(() => hosovuan)
+    @JoinColumn({ name: "id_vuan" })
+    hosovuan!: hosovuan;
+
+    @OneToMany(() => chungcu, (cc) => cc.hosovuan)
+    ds_chungcu!: chungcu[];
 }

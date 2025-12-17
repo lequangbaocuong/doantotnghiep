@@ -42,3 +42,15 @@ export const uploadWanted = multer({
         }
     }
 }).single('anh');
+
+export const uploadSingleEvidence = multer({
+    storage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.match(/jpeg|jpg|png|gif|mp4|mov|pdf|doc|docx/)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Định dạng file không hợp lệ!'));
+        }
+    }
+}).single('file');
