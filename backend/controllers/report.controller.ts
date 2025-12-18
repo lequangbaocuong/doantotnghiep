@@ -1,50 +1,78 @@
 import { Request, Response } from 'express';
-// BỎ DÒNG NÀY: import { getRepository } from 'typeorm'; 
-// THAY BẰNG DÒNG DƯỚI (đường dẫn trỏ tới file data-source của bạn):
 import { AppDataSource } from '../configs/data-source'; 
-
 import { nguoidan, GioiTinh } from '../entity/nguoidan';
 import { dontogiac, LoaiToiPham, VaiTroNguoiDan } from '../entity/dontogiac';
 import { chungcu, LoaiChungCu } from '../entity/chungcu';
 import { generateId } from '../utils/idreport.util';
-
+import { nannhan, TinhTrangNanNhan } from '../entity/nannhan';
 export const reportController = {
     async submitReport(req: Request, res: Response) {
         try {
             const {
                 hoten, email, sodienthoai, diachi, cccd, gioitinh,
                 loaitoipham, vaitronguoidan, tieude, noidung, diachivuviec, ngayxayra, andanh,
-                loaichungcu
+                loaichungcu, tinhtrang
             } = req.body;
             
             const uploadedFiles = req.files as Express.Multer.File[];
             
-            // --- SỬA ĐOẠN NÀY ---
-            // Thay vì dùng getRepository trực tiếp, hãy dùng qua AppDataSource
             const nguoidanRepo = AppDataSource.getRepository(nguoidan);
             const dontogiacRepo = AppDataSource.getRepository(dontogiac);
             const chungcuRepo = AppDataSource.getRepository(chungcu);
-            // --------------------
-            
+            const nannhanRepo = AppDataSource.getRepository(nannhan);
+
             let nguoidanId: string | null = null;
             
-            // ... (Các phần logic bên dưới giữ nguyên không cần sửa) ...
-
-            // Kiểm tra user
             let user = await nguoidanRepo.findOne({ where: { cccd } });
 
             if (!user) {
+                const lastUser = await nguoidanRepo.find({
+                    order: { id_nguoidan: "DESC" },
+                    take: 1
+                });
+
+                let newId = "ND0001";
+
+                if (lastUser.length > 0) {
+                    const lastId = lastUser[0].id_nguoidan;
+                    if (lastId.startsWith("ND")) {
+                        const numberPart = parseInt(lastId.substring(2)); 
+                        if (!isNaN(numberPart)) {
+                            newId = `ND${(numberPart + 1).toString().padStart(4, "0")}`;
+                        }
+                    }
+                }
+
                 user = nguoidanRepo.create({
-                    id_nguoidan: generateId('ND'),
+                    id_nguoidan: newId, 
                     cccd, hoten, sodienthoai, email,
                     gioitinh: gioitinh as GioiTinh,
                     diachi, matkhau: '123456', anh: '', lan_dau_dang_nhap: true
                 });
                 await nguoidanRepo.save(user);
             }
+
             nguoidanId = user.id_nguoidan;
 
-            // Tạo đơn tố giác
+            if (vaitronguoidan === 'nạn nhân') {
+                const lastVictim = await nannhanRepo.find({ order: { id_nannhan: "DESC" }, take: 1 });
+                let newVictimId = "NN0001";
+                if (lastVictim.length > 0 && lastVictim[0].id_nannhan.startsWith("NN")) {
+                    const num = parseInt(lastVictim[0].id_nannhan.substring(2));
+                    if (!isNaN(num)) newVictimId = `NN${(num + 1).toString().padStart(4, "0")}`;
+                }
+
+                const newVictim = nannhanRepo.create({
+                    id_nannhan: newVictimId,
+                    hovaten: hoten,         
+                    sodienthoai: sodienthoai, 
+                    gioitinh: gioitinh as GioiTinh,    
+                    diachi: diachi,        
+                    tinhtrang: (tinhtrang || 'còn sống') as TinhTrangNanNhan,
+                });
+                await nannhanRepo.save(newVictim);
+            }
+
             const newToGiac = dontogiacRepo.create({
                 id_togiac: generateId('DT'),
                 id_nguoidan: nguoidanId,
@@ -59,7 +87,6 @@ export const reportController = {
 
             const savedToGiac = await dontogiacRepo.save(newToGiac);
 
-            // Tạo chứng cứ
             if (uploadedFiles && uploadedFiles.length > 0) {
                 const chungcuEntities = uploadedFiles.map(file => {
                     return chungcuRepo.create({
@@ -93,7 +120,6 @@ export const reportController = {
         try {
             const reportRepo = AppDataSource.getRepository(dontogiac);
             
-            // Lấy tất cả, sắp xếp ngày gửi mới nhất lên đầu
             const reports = await reportRepo.find({
                 order: { ngaygui: "DESC" }
             });

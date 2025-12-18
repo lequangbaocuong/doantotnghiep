@@ -41,6 +41,21 @@ export default function ReportStep1({ nextStep, updateFormData, data }) {
         </select>
       </div>
 
+      {form.relation === 'nạn nhân' && (
+        <div className="mt-4 bg-red-50 p-4 rounded border border-red-100 animate-fade-in">
+            <label className="block font-medium mb-2 text-red-800">Tình trạng hiện tại của bạn</label>
+            <select 
+                name="victimCondition" 
+                value={form.victimCondition || "còn sống"} 
+                onChange={handleChange} 
+                className="border p-2 rounded w-full border-red-300 focus:ring-red-500"
+            >
+                <option value="còn sống">Còn sống (Bình thường)</option>
+                <option value="bị thương">Bị thương (Cần hỗ trợ y tế)</option>
+            </select>
+        </div>
+      )}
+
       <div className="mt-3">
         <label className="inline-flex items-center">
           <input

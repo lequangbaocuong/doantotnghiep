@@ -54,7 +54,7 @@ export default function ReportStep3({ data, prevStep }) {
       );
 
       alert("Gửi thành công! Mã tố giác của bạn là: " + res.data.id_togiac);
-
+      navigate("/");
     } catch (error) {
       console.error("Lỗi khi gửi tố giác:", error);
       alert("Lỗi: " + (error.response?.data?.message || "Không thể gửi tố giác"));

@@ -12,6 +12,7 @@ import { truyna } from "../entity/truyna";
 import { kehoachdieutra } from "../entity/kehoachdieutra";
 import { nhiemvudieutra } from "../entity/nhiemvudieutra";
 import { vaitro } from "../entity/vaitro";
+import { nannhan } from "../entity/nannhan";
 export const AppDataSource = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST,
@@ -31,7 +32,8 @@ export const AppDataSource = new DataSource({
         truyna,
         kehoachdieutra,
         nhiemvudieutra,
-        vaitro
+        vaitro,
+        nannhan
     ],
     subscribers: [],
     migrations: [],
