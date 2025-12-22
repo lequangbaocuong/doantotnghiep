@@ -24,14 +24,13 @@ import ManageUsers from "../pages/admin/ManageUser";
 import CreateAccount from "../components/CreateAccount";
 import QuanLyTruyNa from "../pages/admin/QuanLyTruyNa";
 import ProtectedRouteCanBo from "../components/ProtectedRoute_Canbo";
+import ManageCitizenAccounts from "../pages/admin/ManageCitizen";
 
 export default function Congan_Routes() {
     return (  
         <Routes>
-            {/* route không cần login */}
             <Route path="/congan/login" element={<LoginCanBo />} />
-
-            {/* ----- Các route Công An cần login ----- */}
+            
             <Route element={<ProtectedRouteCanBo />}>
                 <Route element={<CongAnLayout />}>
                     <Route path="/congan" element={<CongAnPhuong />} /> 
@@ -45,7 +44,6 @@ export default function Congan_Routes() {
                     <Route path="/congan/nghipham/:id" element={<ChiTietNghiPham />} />
                 </Route>
 
-                {/* Thu trưởng cũng phải đăng nhập */}
                 <Route element={<ThuTruongLayout />}>
                     <Route path="/thutruong" element={<ThuTruongDonVi />} />
                     <Route path="/thutruong/phan-tich-vu-an" element={<PhanTichVuAn />} />
@@ -58,6 +56,7 @@ export default function Congan_Routes() {
                     <Route path="/admin/users" element={<ManageUsers />} />
                     <Route path="/admin/create-account" element={<CreateAccount />} />
                     <Route path="/admin/posts" element={<QuanLyTruyNa />} />
+                    <Route path="/admin/accounts" element={<ManageCitizenAccounts />} />
                 </Route>
             </Route>
         </Routes>

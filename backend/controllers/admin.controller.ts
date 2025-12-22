@@ -104,5 +104,44 @@ export const adminController = {
             }
             return res.json({ message: "Đã xóa người dùng" });
         } catch (e) { return res.status(500).json({ message: "Lỗi xóa" }); }
+    },
+
+    async createCitizenAccount(req: Request, res: Response) {
+        try {
+            const { hoten, email, cccd, sodienthoai, diachi, matkhau } = req.body;
+            const repo = AppDataSource.getRepository(nguoidan);
+
+            if (!/^\d{12}$/.test(cccd)) {
+                return res.status(400).json({ message: "Số CCCD không hợp lệ! Vui lòng nhập đúng 12 chữ số." });
+            }
+
+            const existEmail = await repo.findOneBy({ email });
+            if (existEmail) return res.status(400).json({ message: "Email đã tồn tại!" });
+            
+            const existCCCD = await repo.findOneBy({ cccd });
+            if (existCCCD) return res.status(400).json({ message: "Số CCCD này đã được đăng ký!" });
+
+            const lastUser = await repo.find({ order: { id_nguoidan: "DESC" }, take: 1 });
+            let newId = "ND0001";
+            if (lastUser.length > 0 && lastUser[0].id_nguoidan.startsWith("ND")) {
+                const num = parseInt(lastUser[0].id_nguoidan.substring(2));
+                if (!isNaN(num)) newId = `ND${(num + 1).toString().padStart(4, "0")}`;
+            }
+
+            const newAcc = repo.create({
+                id_nguoidan: newId,
+                hoten, email, cccd, sodienthoai, diachi,
+                matkhau: matkhau || "123456",
+                gioitinh: "khác",
+                lan_dau_dang_nhap: true
+            });
+
+            await repo.save(newAcc);
+            return res.json({ message: "Cấp tài khoản người dân thành công!", data: newAcc });
+
+        } catch (e) {
+            console.error(e);
+            return res.status(500).json({ message: "Lỗi server khi tạo tài khoản" });
+        }
     }
 };

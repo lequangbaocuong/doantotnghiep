@@ -1,16 +1,15 @@
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Users, FileText, Key, Shield } from "lucide-react";
+import { LayoutDashboard, Users, FileText, Key } from "lucide-react";
 
 export default function AdminLayout() {
   const location = useLocation();
 
   const menu = [
     { name: "Tổng quan", path: "/admin/dashboard", icon: <LayoutDashboard /> },
-    { name: "Quản lý người dùng", path: "/admin/users", icon: <Users /> },
+    { name: "Quản lý tài khoản cán bộ", path: "/admin/users", icon: <Users /> },
     { name: "Quản lý bài đăng", path: "/admin/posts", icon: <FileText /> },
     { name: "Cấp tài khoản", path: "/admin/accounts", icon: <Key /> },
-    { name: "Giám sát bảo mật", path: "/admin/security", icon: <Shield /> },
   ];
 
   return (

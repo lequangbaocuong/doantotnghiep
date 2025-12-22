@@ -32,7 +32,7 @@ export class AuthController {
                     cccd: user.cccd
                 },
                 process.env.JWT_SECRET || "secret",
-                { expiresIn: "24h" }
+                { expiresIn: "1h" }
             );
 
             return res.status(200).json({
@@ -209,7 +209,7 @@ export class AuthController {
                     id_vaitro: user.id_vaitro // Quan trọng để phân quyền Thủ trưởng/Cán bộ
                 },
                 process.env.JWT_SECRET || "secret",
-                { expiresIn: "24h" }
+                { expiresIn: "1h" }
             );
 
             // 6. Trả về kết quả (Loại bỏ mật khẩu)
