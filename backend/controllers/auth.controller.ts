@@ -4,6 +4,7 @@ import { nguoidan } from "../entity/nguoidan";
 import { canbo } from "../entity/canbo";
 import * as bcrypt from "bcryptjs"; 
 import * as jwt from "jsonwebtoken";
+import { sendResetPasswordEmail } from "../services/email.service";
 
 export class AuthController {
     static login = async (req: Request, res: Response) => {
@@ -216,6 +217,77 @@ export class AuthController {
         } catch (error) {
             console.error("Lỗi đăng nhập cán bộ:", error);
             return res.status(500).json({ message: "Lỗi server nội bộ" });
+        }
+    };
+
+    static forgotPassword = async (req: Request, res: Response) => {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ message: "Vui lòng nhập Email!" });
+
+        const danRepo = AppDataSource.getRepository(nguoidan);
+        
+
+        try {
+            let user: any = await danRepo.findOneBy({ email });
+            let type = 'nguoidan';
+
+            if (!user) {
+                return res.status(404).json({ message: "Email không tồn tại trong hệ thống!" });
+            }
+
+           const resetToken = jwt.sign(
+                { id: user.id_nguoidan, type: 'nguoidan' },
+                process.env.JWT_SECRET || "secret",
+                { expiresIn: "15m" }
+            );
+
+            const resetLink = `http://localhost:5173/reset-password?token=${resetToken}`;
+
+            await sendResetPasswordEmail(email, resetLink);
+
+            return res.json({ message: "Link đặt lại mật khẩu đã được gửi vào Email của bạn!" });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi gửi email" });
+        }
+    };
+
+    static resetPassword = async (req: Request, res: Response) => {
+        const { token, newPassword } = req.body;
+
+        if (!token || !newPassword) return res.status(400).json({ message: "Thiếu thông tin!" });
+        if (newPassword.length < 6) return res.status(400).json({ message: "Mật khẩu phải >= 6 ký tự" });
+
+        try {
+            const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "secret");
+            const { id, type } = decoded;
+
+            const danRepo = AppDataSource.getRepository(nguoidan);
+            const canboRepo = AppDataSource.getRepository(canbo);
+            
+            let user: any;
+            let repo: any;
+
+            if (type === 'nguoidan') {
+                repo = danRepo;
+                user = await danRepo.findOneBy({ id_nguoidan: id });
+            } else {
+                repo = canboRepo;
+                user = await canboRepo.findOneBy({ id_canbo: id });
+            }
+
+            if (!user) return res.status(404).json({ message: "User không tồn tại!" });
+
+            const salt = await bcrypt.genSalt(10);
+            user.matkhau = await bcrypt.hash(newPassword, salt);
+
+            await repo.save(user);
+
+            return res.json({ message: "Đặt lại mật khẩu thành công! Hãy đăng nhập lại." });
+
+        } catch (error) {
+            return res.status(400).json({ message: "Link đã hết hạn hoặc không hợp lệ!" });
         }
     };
 }

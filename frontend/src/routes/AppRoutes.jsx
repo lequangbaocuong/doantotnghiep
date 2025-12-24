@@ -9,6 +9,7 @@ import ProfilePage from "../pages/profile/ProfilePage";
 import ForgotPassword from "../pages/ForgotPassword";
 import ChangePassword from "../pages/ChangePassword";
 import ProtectedRoute from "../components/ProtectedRoute";
+import ResetPassword from "../pages/ResetPassword";
 
 export default function AppRoutes() {
     return (  
@@ -27,6 +28,7 @@ export default function AppRoutes() {
             <Route path="/statistics" element={<ThongKePage />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
     );
 }
