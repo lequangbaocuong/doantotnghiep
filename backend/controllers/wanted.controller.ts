@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../configs/data-source';
 import { truyna, MucDo, GioiTinh } from '../entity/truyna';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 
 export const truynaController = {
     async create(req: Request, res: Response) {

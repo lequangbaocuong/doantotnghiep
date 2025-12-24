@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../configs/data-source';
 import { nghipham } from '../entity/nghipham';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 
 export const suspectController = {
     async addSuspect(req: Request, res: Response) {

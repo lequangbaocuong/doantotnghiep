@@ -66,8 +66,8 @@ export default function CreateCitizen({ onClose, onSuccess }) {
             </div>
 
             <div>
-              <label className="text-gray-400 text-sm block mb-1">Email <span className="text-red-500">*</span></label>
-              <input required type="email" className="w-full bg-[#0f1a26] border border-gray-600 rounded p-2 text-white focus:border-[#4ECDC4] outline-none"
+              <label className="text-gray-400 text-sm block mb-1">Email </label>
+              <input type="email" className="w-full bg-[#0f1a26] border border-gray-600 rounded p-2 text-white focus:border-[#4ECDC4] outline-none"
                 value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="email@example.com" />
             </div>
 
@@ -78,7 +78,7 @@ export default function CreateCitizen({ onClose, onSuccess }) {
             </div>
 
             <div className="md:col-span-2">
-              <label className="text-gray-400 text-sm block mb-1">Địa chỉ</label>
+              <label className="text-gray-400 text-sm block mb-1">Địa chỉ  <span className="text-red-500">*</span> </label>
               <input required className="w-full bg-[#0f1a26] border border-gray-600 rounded p-2 text-white focus:border-[#4ECDC4] outline-none"
                 value={form.diachi} onChange={e => setForm({...form, diachi: e.target.value})} />
             </div>

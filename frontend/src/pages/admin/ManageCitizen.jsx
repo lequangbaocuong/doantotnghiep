@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { UserPlus, Trash2, Search } from "lucide-react";
-import CreateCitizen from "../../components/CreateCitizen";
+import { UserPlus, Trash2, Search, Edit } from "lucide-react"; 
+import CreateCitizen from "../../components/CreateCitizen"; 
+import EditCitizen from "../../components/EditCitizen"; 
 
 export default function ManageCitizenAccounts() {
   const [citizens, setCitizens] = useState([]);
   const [search, setSearch] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingUser, setEditingUser] = useState(null); 
 
   const fetchData = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/admin/users");
       const onlyCitizens = res.data.filter(u => u.type === 'nguoidan');
       setCitizens(onlyCitizens);
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa tài khoản này?")) return;
@@ -28,9 +26,7 @@ export default function ManageCitizenAccounts() {
       await axios.delete(`http://localhost:5000/api/admin/users/nguoidan/${id}`);
       alert("Đã xóa thành công!");
       fetchData(); 
-    } catch (e) {
-      alert("Lỗi khi xóa!");
-    }
+    } catch (e) { alert("Lỗi khi xóa!"); }
   };
 
   const filtered = citizens.filter(u => 
@@ -46,7 +42,7 @@ export default function ManageCitizenAccounts() {
           <UserPlus /> Quản lý Tài khoản Công Dân
         </h1>
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => setShowCreateModal(true)}
           className="bg-[#4ECDC4] text-black hover:bg-[#3dbdb4] px-4 py-2 rounded flex items-center gap-2 font-bold transition shadow-lg"
         >
           <UserPlus size={20} /> Cấp tài khoản mới
@@ -77,7 +73,12 @@ export default function ManageCitizenAccounts() {
             <tbody>
             {filtered.length > 0 ? filtered.map((u) => (
                 <tr key={u.id} className="hover:bg-[#20304a] border-t border-gray-700 transition">
-                <td className="p-4 font-mono text-[#4ECDC4] font-bold">{u.id}</td>
+                
+                <td className="p-4 font-mono text-[#4ECDC4] font-bold cursor-pointer hover:underline"
+                    onClick={() => setEditingUser(u)}>
+                    {u.id}
+                </td>
+                
                 <td className="p-4 font-medium">{u.hoten}</td>
                 <td className="p-4 text-gray-400">{u.email}</td>
                 <td className="p-4 text-center">
@@ -85,9 +86,22 @@ export default function ManageCitizenAccounts() {
                     Hoạt động
                     </span>
                 </td>
-                <td className="p-4 text-center">
-                    <button onClick={() => handleDelete(u.id)} className="text-gray-500 hover:text-red-500 p-2 transition hover:bg-red-500/10 rounded-full">
-                    <Trash2 size={18} />
+                <td className="p-4 text-center flex justify-center gap-2">
+                  
+                    <button 
+                        onClick={() => setEditingUser(u)} 
+                        className="text-gray-500 hover:text-blue-400 p-2 transition hover:bg-blue-500/10 rounded-full"
+                        title="Chỉnh sửa thông tin"
+                    >
+                        <Edit size={18} />
+                    </button>
+
+                    <button 
+                        onClick={() => handleDelete(u.id)} 
+                        className="text-gray-500 hover:text-red-500 p-2 transition hover:bg-red-500/10 rounded-full"
+                        title="Xóa tài khoản"
+                    >
+                        <Trash2 size={18} />
                     </button>
                 </td>
                 </tr>
@@ -100,10 +114,18 @@ export default function ManageCitizenAccounts() {
         </table>
       </div>
 
-      {showModal && (
+      {showCreateModal && (
         <CreateCitizen
-            onClose={() => setShowModal(false)}
+            onClose={() => setShowCreateModal(false)}
             onSuccess={fetchData}               
+        />
+      )}
+
+      {editingUser && (
+        <EditCitizen
+            user={editingUser}
+            onClose={() => setEditingUser(null)} 
+            onSuccess={fetchData} 
         />
       )}
     </div>

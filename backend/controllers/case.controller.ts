@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../configs/data-source';
 import { hosovuan } from '../entity/hosovuan';
 import { dontogiac } from '../entity/dontogiac';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 import { canbo } from '../entity/canbo';
 
 export const caseController = {

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AppDataSource } from '../configs/data-source';
 import { chungcu } from '../entity/chungcu';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 
 export const evidenceController = {
     

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { AppDataSource } from '../configs/data-source';
 import { kehoachdieutra } from '../entity/kehoachdieutra';
 import { nhiemvudieutra } from '../entity/nhiemvudieutra';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 
 export const assignmentController = {
     async getPlansByCase(req: Request, res: Response) {

@@ -3,7 +3,7 @@ import { AppDataSource } from '../configs/data-source';
 import { nguoidan, GioiTinh } from '../entity/nguoidan';
 import { dontogiac, LoaiToiPham, VaiTroNguoiDan } from '../entity/dontogiac';
 import { chungcu, LoaiChungCu } from '../entity/chungcu';
-import { generateId } from '../utils/idreport.util';
+import { generateId } from '../utils/idrgenerate.util';
 import { nannhan, TinhTrangNanNhan } from '../entity/nannhan';
 export const reportController = {
     async submitReport(req: Request, res: Response) {

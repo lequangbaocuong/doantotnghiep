@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../configs/data-source";
 import { nguoidan } from "../entity/nguoidan";
 import { canbo } from "../entity/canbo";
-//import * as bcrypt from "bcryptjs"; chưa mã hóa mật khẩu, chỉ test api
+import * as bcrypt from "bcryptjs"; 
 import * as jwt from "jsonwebtoken";
 
 export class AuthController {
@@ -19,8 +19,8 @@ export class AuthController {
             if (!user) {
                 return res.status(401).json({ message: "Sai thông tin đăng nhập!" });
             }
-            const isPasswordValid = matkhau === user.matkhau; // chưa mã hóa mật khẩu, chỉ test api
-            //await bcrypt.compare(matkhau, user.matkhau); //dùng bcrypt để mã hóa mật khẩu
+
+            const isPasswordValid = await bcrypt.compare(matkhau, user.matkhau);
 
             if (!isPasswordValid) {
                 return res.status(401).json({ message: "Sai thông tin đăng nhập!" });
@@ -64,16 +64,13 @@ export class AuthController {
             if (!user) {
                 return res.status(404).json({ message: "Không tìm thấy người dùng!" });
             }
-            if (matkhauCu !== user.matkhau) {
+            const isMatch = await bcrypt.compare(matkhauCu, user.matkhau);
+            if (!isMatch) {
                 return res.status(400).json({ message: "Mật khẩu cũ không chính xác!" });
             }
-            // const isMatch = await bcrypt.compare(matkhauCu, user.matkhau);
-            // if (!isMatch) {
-            //     return res.status(400).json({ message: "Mật khẩu cũ không chính xác!" });
-            // }
-            user.matkhau = matkhauMoi;
-            // const newHashPassword = await bcrypt.hash(matkhauMoi, 10);
-            // user.matkhau = newHashPassword;
+            const matkhaumahoa = await bcrypt.hash(matkhauMoi, 10);
+            user.matkhau = matkhaumahoa;
+
             await nguoiDanRepo.save(user);
             return res.status(200).json({ message: "Đổi mật khẩu thành công!" });
 
@@ -86,24 +83,22 @@ export class AuthController {
     static changePasswordFirstTime = async (req: Request, res: Response) => {
         const userId = (req as any).userPayload.id;
         const { matkhauMoi } = req.body; 
-        if (!matkhauMoi) {
-            return res.status(400).json({ message: "Vui lòng nhập mật khẩu mới!" });
-        }
-        if (matkhauMoi.length < 6) {
-             return res.status(400).json({ message: "Mật khẩu phải từ 6 ký tự trở lên!" });
-        }
+        if (!matkhauMoi || matkhauMoi.length < 6) 
+            return res.status(400).json({ message: "Mật khẩu không hợp lệ!" });
+
         const nguoiDanRepo = AppDataSource.getRepository(nguoidan);
         try {
             const user = await nguoiDanRepo.findOneBy({ id_nguoidan: userId });
             if (!user) {
-                return res.status(404).json({ message: "Không tìm thấy người dùng!" });
+                return res.status(404).json({ message: "Không tìm thấy thông tin người dân!" });
             }
             if (!user.lan_dau_dang_nhap) {
                 return res.status(403).json({ 
                     message: "Tài khoản đã kích hoạt. Vui lòng dùng chức năng đổi mật khẩu thông thường (cần mật khẩu cũ)." 
                 });
             }
-            user.matkhau = matkhauMoi; 
+            const matkhaumahoa = await bcrypt.hash(matkhauMoi, 10);
+            user.matkhau = matkhaumahoa;
             user.lan_dau_dang_nhap = false;
             await nguoiDanRepo.save(user);
             return res.status(200).json({ message: "Kích hoạt tài khoản và đổi mật khẩu thành công!" });
@@ -178,7 +173,6 @@ export class AuthController {
     static loginCanBo = async (req: Request, res: Response) => {
         const { email, matkhau } = req.body;
 
-        // 1. Kiểm tra đầu vào
         if (!email || !matkhau) {
             return res.status(400).json({ message: "Vui lòng nhập Email và Mật khẩu!" });
         }
@@ -186,40 +180,37 @@ export class AuthController {
         const canboRepo = AppDataSource.getRepository(canbo);
 
         try {
-            // 2. Tìm cán bộ theo email
             const user = await canboRepo.findOne({
                 where: { email: email }
             });
-
-            // 3. Kiểm tra tồn tại
+            
             if (!user) {
                 return res.status(401).json({ message: "Email không tồn tại trong hệ thống!" });
             }
 
-            // 4. Kiểm tra mật khẩu (So sánh chuỗi thường vì chưa có bcrypt)
-            if (user.matkhau !== matkhau) {
+            const isMatch = await bcrypt.compare(matkhau, user.matkhau);
+
+            if (!isMatch) {
                 return res.status(401).json({ message: "Mật khẩu không chính xác!" });
             }
 
-            // 5. Tạo Token
             const token = jwt.sign(
                 { 
                     id_canbo: user.id_canbo, 
-                    role: "congan",      // Đánh dấu role là công an
-                    id_vaitro: user.id_vaitro // Quan trọng để phân quyền Thủ trưởng/Cán bộ
+                    role: "congan",     
+                    id_vaitro: user.id_vaitro 
                 },
                 process.env.JWT_SECRET || "secret",
                 { expiresIn: "1h" }
             );
 
-            // 6. Trả về kết quả (Loại bỏ mật khẩu)
             const { matkhau: _, ...userData } = user;
 
             return res.status(200).json({
                 success: true,
                 message: "Đăng nhập cán bộ thành công!",
                 token: token,
-                user: userData // Frontend sẽ dùng user.id_vaitro để điều hướng
+                user: userData 
             });
 
         } catch (error) {

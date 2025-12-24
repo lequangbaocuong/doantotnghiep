@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Lock } from "lucide-react";
 import AuthLayout from "../layouts/auth_layout";
 import axios from "axios";
+import LoginSuccess from "../components/LoginSuccess"; 
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -14,8 +15,15 @@ export default function ChangePassword() {
     confirmPassword: "",
   });
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    navigate("/");
   };
 
   async function handleSubmit(e) {
@@ -32,19 +40,27 @@ export default function ChangePassword() {
         alert("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.");
         return navigate("/login");
       } 
-      const response = await axios.post(
+      
+      await axios.post(
         "http://localhost:5000/api/auth/change-password-first-time",
         { 
           matkhauMoi: form.newPassword 
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
-      alert(response.data.message || "Đổi mật khẩu thành công!");
-      navigate("/login-success");
+
+      const userStr = localStorage.getItem("user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        user.lan_dau_dang_nhap = false; 
+        localStorage.setItem("user", JSON.stringify(user));
+        window.dispatchEvent(new Event("storageChange"));
+      }
+
+      setShowSuccess(true);
+
     } catch (error) {
       console.error("Lỗi:", error);
       const msg = error.response?.data?.message || "Lỗi kết nối đến máy chủ!";
@@ -53,60 +69,65 @@ export default function ChangePassword() {
   };
 
   return (
-    <AuthLayout title="ĐỔI MẬT KHẨU LẦN ĐẦU">
-      <div className="text-center mb-6">
-        <p className="text-gray-400">Bạn đang đổi mật khẩu cho</p>
-        <p className="text-white font-semibold text-lg mt-1">{cccd}</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Mật khẩu mới */}
-        <div>
-          <label className="text-gray-300 block mb-1">Mật khẩu mới *</label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-2.5 w-5 h-5 text-gray-500" />
-            <input
-              type="password"
-              name="newPassword"
-              placeholder="Nhập mật khẩu mới"
-              value={form.newPassword}
-              onChange={handleChange}
-              className="w-full px-10 py-2 rounded bg-[#0f1a26] border border-gray-600 
-              focus:ring-1 focus:ring-[#ff5252] outline-none"
-            />
-          </div>
+    <>
+      <AuthLayout title="ĐỔI MẬT KHẨU LẦN ĐẦU">
+        <div className="text-center mb-6">
+          <p className="text-gray-400">Bạn đang đổi mật khẩu cho tài khoản</p>
+          <p className="text-white font-semibold text-lg mt-1">{cccd}</p>
         </div>
 
-        {/* Xác nhận mật khẩu */}
-        <div>
-          <label className="text-gray-300 block mb-1">Xác nhận mật khẩu *</label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-2.5 w-5 h-5 text-gray-500" />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Nhập lại mật khẩu mới"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              className="w-full px-10 py-2 rounded bg-[#0f1a26] border border-gray-600 
-              focus:ring-1 focus:ring-[#ff5252] outline-none"
-            />
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="text-gray-300 block mb-1">Mật khẩu mới *</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-2.5 w-5 h-5 text-gray-500" />
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="Nhập mật khẩu mới"
+                value={form.newPassword}
+                onChange={handleChange}
+                className="w-full px-10 py-2 rounded bg-[#0f1a26] border border-gray-600 
+                focus:ring-1 focus:ring-[#ff5252] outline-none"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Gợi ý */}
-        <p className="text-gray-500 text-sm mt-2">
-          Mật khẩu nên chứa ít nhất một chữ hoa, số và ký tự đặc biệt để tăng bảo mật.
-        </p>
+          <div>
+            <label className="text-gray-300 block mb-1">Xác nhận mật khẩu *</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-2.5 w-5 h-5 text-gray-500" />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Nhập lại mật khẩu mới"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                className="w-full px-10 py-2 rounded bg-[#0f1a26] border border-gray-600 
+                focus:ring-1 focus:ring-[#ff5252] outline-none"
+              />
+            </div>
+          </div>
 
-        {/* Nút xác nhận */}
-        <button
-          type="submit"
-          className="w-full py-2 bg-[#ff5252] hover:bg-[#e04848] rounded font-semibold transition"
-        >
-          Xác nhận thay đổi
-        </button>
-      </form>
-    </AuthLayout>
+          <p className="text-gray-500 text-sm mt-2">
+            Mật khẩu nên chứa ít nhất một chữ hoa, số và ký tự đặc biệt để tăng bảo mật.
+          </p>
+
+          <button
+            type="submit"
+            className="w-full py-2 bg-[#ff5252] hover:bg-[#e04848] rounded font-semibold transition"
+          >
+            Xác nhận thay đổi
+          </button>
+        </form>
+      </AuthLayout>
+
+      {showSuccess && (
+        <LoginSuccess 
+            isOpen={showSuccess} 
+            onClose={handleCloseSuccess} 
+        />
+      )}
+    </>
   );
 }
