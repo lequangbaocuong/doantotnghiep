@@ -1,4 +1,3 @@
-// backend/routes/case.route.ts
 import { Router } from 'express';
 import { caseController } from '../controllers/case.controller';
 

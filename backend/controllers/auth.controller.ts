@@ -126,6 +126,7 @@ export class AuthController {
                 email: user.email,
                 ngaysinh: user.ngaysinh,
                 lan_dau_dang_nhap: user.lan_dau_dang_nhap,
+                diachi: user.diachi
             });
         } catch (error) {
             console.error(error);

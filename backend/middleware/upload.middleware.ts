@@ -1,56 +1,35 @@
 import multer from "multer";
-import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import dotenv from "dotenv";
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../uploads/evidences"));
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+dotenv.config();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+        return {
+            folder: 'crime-reporting',
+            resource_type: 'auto',    
+            allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'mov', 'pdf', 'doc', 'docx'],
+            public_id: file.fieldname + '-' + Date.now() 
+        };
     },
 });
 
-export const uploadEvidence = multer({
-    storage,
-    limits: { 
-        fileSize: 5 * 1024 * 1024, // 5MB
-        files: 5,
-    },
-    fileFilter: (req, file, cb) => {
-        // Chỉ chấp nhận các định dạng ảnh, video, pdf phổ biến
-        if (file.mimetype.match(/jpeg|jpg|png|gif|mp4|mov|pdf/)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Định dạng file không hợp lệ!'));
-        }
-    }
-}).array('files', 5);
 
-export const uploadWanted = multer({
-    storage,
-    limits: { 
-        fileSize: 5 * 1024 * 1024, // 5MB
-        files: 5,
-    },
-    fileFilter: (req, file, cb) => {
-        // Chỉ chấp nhận các định dạng ảnh, video, pdf phổ biến
-        if (file.mimetype.match(/jpeg|jpg|png|gif|mp4|mov|pdf/)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Định dạng file không hợp lệ!'));
-        }
-    }
+export const uploadCloud = multer({ 
+    storage: storage,
+    limits: { fileSize: 20 * 1024 * 1024 } 
+}).array('files', 10); 
+
+
+export const uploadSingleCloud = multer({
+    storage: storage
 }).single('anh');
-
-export const uploadSingleEvidence = multer({
-    storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype.match(/jpeg|jpg|png|gif|mp4|mov|pdf|doc|docx/)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Định dạng file không hợp lệ!'));
-        }
-    }
-}).single('file');

@@ -15,7 +15,7 @@ export const truynaController = {
 
             let imagePath = '';
             if (file) {
-                imagePath = `/uploads/evidences/${file.filename}`;
+                imagePath = file.path;
             } else if (anh_hien_co) {
                 imagePath = anh_hien_co;
             }

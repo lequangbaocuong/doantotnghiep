@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Calendar, MapPin, FileText, AlertOctagon, Edit, FileWarning } from "lucide-react";
+import { ArrowLeft, User, Calendar, MapPin, FileText, AlertOctagon, Edit, FileWarning, Camera } from "lucide-react";
 import axios from "axios";
 
 export default function ChiTietNghiPham() {
@@ -8,6 +8,14 @@ export default function ChiTietNghiPham() {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const getImageUrl = (path) => {
+        if (!path) return "";
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return path;
+        }
+        return `http://localhost:5000${path}`;
+    };
 
     const handleCreateWanted = () => {
         if (!data) return;
@@ -51,19 +59,30 @@ export default function ChiTietNghiPham() {
                 </button>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="bg-[#1b2838] p-6 rounded-2xl border border-gray-700 h-fit text-center">
-                        <div className="w-48 h-48 mx-auto bg-gray-700 rounded-full overflow-hidden border-4 border-[#2e4a68] mb-6 relative group">
+                    
+                    <div className="bg-[#1b2838] p-6 rounded-2xl border border-gray-700 h-fit text-center sticky top-8">
+                        
+                        <div className="w-full max-w-[250px] mx-auto aspect-[3/4] bg-[#0f1a26] rounded-xl overflow-hidden border border-gray-600 shadow-lg mb-6 relative group">
                             {data.anh ? (
                                 <img 
-                                    src={`http://localhost:5000${data.anh}`} 
+                                    src={getImageUrl(data.anh)}
                                     alt={data.hoten} 
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover" 
+                                    onError={(e) => {
+                                        e.target.onerror = null; 
+                                        e.target.src = "https://via.placeholder.com/250x330?text=No+Image";
+                                    }}
                                 />
                             ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                    <User size={64} />
+                                <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-[#162436]">
+                                    <User size={80} strokeWidth={1} />
+                                    <span className="text-sm mt-2 font-medium">Chưa có ảnh chân dung</span>
                                 </div>
                             )}
+                            
+                             <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-xs py-1 text-gray-300 backdrop-blur-sm flex items-center justify-center gap-1">
+                                <Camera size={12}/> Ảnh nghi phạm
+                             </div>
                         </div>
 
                         <h1 className="text-2xl font-bold text-white mb-2">{data.hoten}</h1>
@@ -89,14 +108,18 @@ export default function ChiTietNghiPham() {
                         </div>
                     </div>
 
+
                     <div className="md:col-span-2 space-y-6">
                         <div className="bg-[#1b2838] p-8 rounded-2xl border border-gray-700 relative">
-                            <button className="absolute top-6 right-6 text-gray-400 hover:text-[#ff5252] transition">
+                            <button 
+                                className="absolute top-6 right-6 text-gray-400 hover:text-[#ff5252] transition" 
+                                title="Chỉnh sửa thông tin"
+                                onClick={() => navigate(`/congan/suanghipham/${id}`)}>
                                 <Edit size={20} />
                             </button>
                             
                             <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-[#4ECDC4] border-b border-gray-700 pb-2">
-                                <User /> Thông tin nhân thân
+                                <User /> Thông tin nghi phạm
                             </h2>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4 text-sm">
@@ -109,10 +132,12 @@ export default function ChiTietNghiPham() {
                                     <p className="text-lg font-medium text-white capitalize">{data.gioitinh}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 mb-1">Ngày sinh</p>
+                                    <p className="text-gray-500 mb-1">Ngày sinh / Năm sinh</p>
                                     <p className="text-lg font-medium text-white flex items-center gap-2">
                                         <Calendar size={16} className="text-gray-400"/>
-                                        {data.ngaysinh ? new Date(data.ngaysinh).toLocaleDateString('vi-VN') : "Chưa rõ"}
+                                        {data.ngaysinh 
+                                            ? (isNaN(new Date(data.ngaysinh)) ? data.ngaysinh : new Date(data.ngaysinh).toLocaleDateString('vi-VN'))
+                                            : "Chưa rõ"}
                                     </p>
                                 </div>
                                 <div>

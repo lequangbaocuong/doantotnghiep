@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { evidenceController } from '../controllers/evidence.controller';
-import { uploadSingleEvidence } from '../middleware/upload.middleware'; // Middleware upload ảnh/file
+import { uploadCloud } from "../middleware/upload.middleware";
 
 const router = Router();
 
-router.post('/submit', uploadSingleEvidence, evidenceController.submitEvidence);
+router.post('/submit', uploadCloud, evidenceController.submitEvidence);
 export default router;

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReportStep1 from "../../components/Step1";
 import ReportStep2 from "../../components/Step2";
 import ReportStep3 from "../../components/Step3";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ReportPage() {
   const [step, setStep] = useState(1);
@@ -22,6 +24,50 @@ export default function ReportPage() {
     evidence: [],
     evidenceType: "",
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+           alert("Vui lòng đăng nhập!");
+           return navigate("/login");
+        }
+
+        const res = await axios.get("http://localhost:5000/api/auth/profile", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const user = res.data;
+        const missingFields = [];
+
+        if (!user.hoten) missingFields.push("Họ tên");
+        if (!user.cccd) missingFields.push("CCCD");
+        if (!user.sodienthoai) missingFields.push("Số điện thoại");
+        if (!user.diachi) missingFields.push("Địa chỉ");
+
+        if (missingFields.length > 0) {
+          alert(
+            `⚠️ Tài khoản của bạn chưa đủ điều kiện gửi tố giác.\n\n` +
+            `Thiếu thông tin: ${missingFields.join(", ")}.\n\n` +
+            `Hệ thống sẽ chuyển bạn đến trang Cập nhật thông tin ngay bây giờ.`
+          );
+          navigate("/profile"); 
+        }
+
+      } catch (error) {
+        console.error("Lỗi kiểm tra profile:", error);
+        if (error.response?.status === 401) {
+            localStorage.clear();
+            navigate("/login");
+        }
+      }
+    };
+
+    checkProfile(); 
+  }, [navigate]);
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);

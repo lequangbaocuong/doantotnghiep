@@ -6,27 +6,25 @@ import axios from "axios";
 export default function TaoHoSoVuAn() {
   const location = useLocation();
   const navigate = useNavigate();
-  const prefillData = location.state?.prefillData || {}; // Nhận dữ liệu từ trang chi tiết
+  const prefillData = location.state?.prefillData || {}; 
   const storedUser = localStorage.getItem("user_canbo");
 
   const [formData, setFormData] = useState({
     tenvuan: "",
     mota: "",
-    ngaytao: new Date().toISOString().split('T')[0], // Mặc định ngày hôm nay
+    ngaytao: new Date().toISOString().split('T')[0], 
     trangthai: "Đang điều tra",
-    mucdo: "ít nghiêm trọng", // Mặc định khớp với DB ENUM
+    mucdo: "ít nghiêm trọng", 
     id_togiac: "",
     id_canbo: "",
-    nguoitao: storedUser ? JSON.parse(storedUser).hoten : "", // Có thể lấy từ localStorage user.hoten
+    nguoitao: storedUser ? JSON.parse(storedUser).hoten : "", 
   });
 
-  // Tự động điền dữ liệu nếu có (khi chuyển từ trang Chi tiết sang)
   useEffect(() => {
     if (prefillData.id_togiac) {
       setFormData(prev => ({
         ...prev,
         id_togiac: prefillData.id_togiac,
-        // Tự động điền tên vụ án bằng tiêu đề tố giác
         tenvuan: `Vụ án: ${prefillData.tieude}`, 
         mota: prefillData.noidung
       }));
@@ -41,11 +39,10 @@ export default function TaoHoSoVuAn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Gọi API tạo vụ án
       const res = await axios.post("http://localhost:5000/api/cases/create", formData);
       
       alert("✅ " + res.data.message);
-      navigate("/admin/cases"); 
+      navigate("/congan/caselists"); 
       
     } catch (error) {
       console.error("Lỗi:", error);
@@ -55,8 +52,6 @@ export default function TaoHoSoVuAn() {
 
   return (
     <div className="min-h-screen bg-[#0f1a26] text-white px-8 py-10">
-      
-      {/* Nút quay lại */}
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-400 hover:text-white mb-6">
         <ArrowLeft size={20} /> Quay lại
       </button>
@@ -69,14 +64,13 @@ export default function TaoHoSoVuAn() {
         onSubmit={handleSubmit}
         className="max-w-5xl mx-auto bg-[#1b2838] p-8 rounded-2xl shadow-lg space-y-10 border border-gray-700"
       >
-        {/* PHẦN 1 - THÔNG TIN VỤ ÁN */}
         <section>
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-[#4ECDC4]">
             <FileText className="w-5 h-5" /> Thông tin chính
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-gray-300 mb-1">Tên vụ án *</label>
+              <label className="block text-gray-300 mb-1">Tên vụ án <span className="text-red-500">*</span> </label>
               <input
                 type="text"
                 name="tenvuan"
@@ -88,7 +82,7 @@ export default function TaoHoSoVuAn() {
             </div>
 
             <div>
-              <label className="block text-gray-300 mb-1">Ngày tạo *</label>
+              <label className="block text-gray-300 mb-1">Ngày tạo <span className="text-red-500">*</span> </label>
               <input
                 type="date"
                 name="ngaytao"
@@ -100,19 +94,18 @@ export default function TaoHoSoVuAn() {
             </div>
 
             <div>
-              <label className="block text-gray-300 mb-1">Mức độ nghiêm trọng *</label>
-              {/* Value phải khớp ENUM trong Database */}
-              <select
-                name="mucdo"
-                value={formData.mucdo}
-                onChange={handleChange}
-                className="w-full bg-[#162436] border border-gray-600 rounded-md px-4 py-2 text-white"
-              >
-                <option value="ít nghiêm trọng">Ít nghiêm trọng</option>
-                <option value="nghiêm trọng">Nghiêm trọng</option>
-                <option value="rất nghiêm trọng">Rất nghiêm trọng</option>
-                <option value="đặc biệt nghiêm trọng">Đặc biệt nghiêm trọng</option>
-              </select>
+              <label className="block text-gray-300 mb-1">Mức độ nghiêm trọng <span className="text-red-500">*</span> </label>
+                <select
+                  name="mucdo"
+                  value={formData.mucdo}
+                  onChange={handleChange}
+                  className="w-full bg-[#162436] border border-gray-600 rounded-md px-4 py-2 text-white"
+                >
+                  <option value="ít nghiêm trọng">Ít nghiêm trọng</option>
+                  <option value="nghiêm trọng">Nghiêm trọng</option>
+                  <option value="rất nghiêm trọng">Rất nghiêm trọng</option>
+                  <option value="đặc biệt nghiêm trọng">Đặc biệt nghiêm trọng</option>
+                </select>
             </div>
             
             <div>
@@ -133,14 +126,14 @@ export default function TaoHoSoVuAn() {
                 type="text"
                 name="id_togiac"
                 value={formData.id_togiac}
-                readOnly // Không cho sửa vì lấy từ trang trước
+                readOnly 
                 className="w-full bg-[#0f1a26] border border-gray-700 rounded-md px-4 py-2 text-gray-400 cursor-not-allowed"
               />
             </div>
           </div>
 
           <div className="mt-4">
-            <label className="block text-gray-300 mb-1">Mô tả vụ án *</label>
+            <label className="block text-gray-300 mb-1">Mô tả vụ án <span className="text-red-500">*</span> </label>
             <textarea
               name="mota"
               value={formData.mota}
@@ -152,7 +145,6 @@ export default function TaoHoSoVuAn() {
           </div>
         </section>
 
-        {/* PHẦN 2 - NHÂN SỰ */}
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
              <div>
@@ -169,7 +161,6 @@ export default function TaoHoSoVuAn() {
           </div>
         </section>
 
-        {/* Nút lưu */}
         <div className="flex justify-end pt-6 border-t border-gray-700">
           <button
             type="submit"

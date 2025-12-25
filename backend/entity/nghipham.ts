@@ -16,7 +16,7 @@ export class nghipham {
     gioitinh!: GioiTinh;
 
     @Column({ type: "date", nullable: true })
-    ngaysinh!: string;
+    ngaysinh!: string | null;
 
     @Column({ type: "varchar", length: 12, unique: true, nullable: true })
     cccd!: string;

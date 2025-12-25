@@ -8,29 +8,37 @@ export const evidenceController = {
     async submitEvidence(req: Request, res: Response) {
         try {
             const { id_vuan, mota, loaichungcu, id_nguoidan } = req.body;
-            const file = req.file; 
+            const files = req.files as Express.Multer.File[];
 
-            if (!id_vuan || !file) {
+            if (!id_vuan) {
                 return res.status(400).json({ message: "Thiếu thông tin vụ án hoặc file đính kèm!" });
+            }
+            if (!files || files.length === 0) {
+                return res.status(400).json({ message: "Vui lòng đính kèm ít nhất một tệp chứng cứ!" });
             }
 
             const repo = AppDataSource.getRepository(chungcu);
+            const savedEvidences = [];
 
-            const newEvidence = repo.create({
-                id_chungcu: generateId('CC'),
-                id_vuan,
-                mota,
-                loaichungcu: loaichungcu || 'tài liệu',
-                duongdantaptin: `/uploads/evidences/${file.filename}`,
-                ngaygui: new Date(),
-                id_nguoidan: id_nguoidan || null 
-            });
+            for (const file of files) {
+                const newEvidence = repo.create({
+                    id_chungcu: generateId('CC'),
+                    id_vuan,
+                    mota,
+                    loaichungcu: loaichungcu || 'tài liệu',
+                    duongdantaptin: file.path, 
+                    ngaygui: new Date(),
+                    id_nguoidan: id_nguoidan || null 
+                });
 
-            await repo.save(newEvidence);
+                const saved = await repo.save(newEvidence);
+                savedEvidences.push(saved);
+            }
 
             return res.status(201).json({ 
                 success: true, 
-                message: "Gửi chứng cứ thành công! Cảm ơn sự đóng góp của bạn." 
+                message: `Đã gửi ${savedEvidences.length} chứng cứ thành công!`,
+                data: savedEvidences
             });
 
         } catch (error) {
