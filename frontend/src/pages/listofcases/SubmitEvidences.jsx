@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -9,25 +9,30 @@ export default function SubmitEvidences() {
   const [form, setForm] = useState({
     loaichungcu: "hình ảnh",
     mota: "",
-    file: null, 
+    files: [], 
   });
 
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const handleFileChange = (e) => {
-    setForm({ ...form, file: e.target.files[0] });
+    if (e.target.files && e.target.files.length > 0) {
+        setForm({ ...form, files: Array.from(e.target.files) });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!form.file) return alert("Vui lòng chọn tệp đính kèm!");
+    if (form.files.length === 0) return alert("Vui lòng chọn ít nhất một tệp đính kèm!");
 
     const formData = new FormData();
     formData.append("id_vuan", id);
     formData.append("loaichungcu", form.loaichungcu);
     formData.append("mota", form.mota);
-    formData.append("file", form.file);
+    
+    form.files.forEach((file) => {
+        formData.append("files", file); 
+    });
     
     if (user.id) {
         formData.append("id_nguoidan", user.id);
@@ -38,12 +43,12 @@ export default function SubmitEvidences() {
             headers: { "Content-Type": "multipart/form-data" }
         });
         
-        alert(" " + res.data.message);
+        alert("✅ " + res.data.message);
         navigate("/cases"); 
 
     } catch (error) {
         console.error(error);
-        alert(" Lỗi: " + (error.response?.data?.message || "Gửi thất bại"));
+        alert("❌ Lỗi: " + (error.response?.data?.message || "Gửi thất bại"));
     }
   };
 
@@ -63,7 +68,6 @@ export default function SubmitEvidences() {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Loại chứng cứ */}
             <div>
               <label className="block font-semibold text-gray-700 mb-2">Loại chứng cứ</label>
               <select
@@ -79,7 +83,6 @@ export default function SubmitEvidences() {
               </select>
             </div>
 
-            {/* Mô tả */}
             <div>
               <label className="block font-semibold text-gray-700 mb-2">Mô tả chi tiết</label>
               <textarea
@@ -91,22 +94,34 @@ export default function SubmitEvidences() {
               ></textarea>
             </div>
 
-            {/* Upload File */}
             <div>
-              <label className="block font-semibold text-gray-700 mb-2">Tệp đính kèm</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-gray-50">
+              <label className="block font-semibold text-gray-700 mb-2">
+                  Tệp đính kèm (Chọn nhiều file)
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-gray-50 relative">
                   <input
                     type="file"
-                    className="w-full h-full opacity-0 absolute cursor-pointer" // Hack để click vào vùng div
+                    multiple
+                    className="w-full h-full opacity-0 absolute top-0 left-0 cursor-pointer"
                     id="fileUpload"
                     onChange={handleFileChange}
-                    style={{display: 'none'}}
                   />
                   <label htmlFor="fileUpload" className="cursor-pointer block">
-                      {form.file ? (
-                          <span className="text-green-600 font-medium">📄 Đã chọn: {form.file.name}</span>
+                      {form.files.length > 0 ? (
+                          <div className="text-left">
+                              <p className="text-green-600 font-bold mb-2">
+                                  ✅ Đã chọn {form.files.length} tệp:
+                              </p>
+                              <ul className="text-sm text-gray-600 list-disc list-inside">
+                                  {form.files.map((file, index) => (
+                                      <li key={index} className="truncate">{file.name}</li>
+                                  ))}
+                              </ul>
+                          </div>
                       ) : (
-                          <span className="text-gray-500">Nhấn để chọn file (Ảnh, Video, Zip...)</span>
+                          <span className="text-gray-500">
+                              Nhấn để chọn file (Giữ <strong>Ctrl</strong> để chọn nhiều ảnh/video)
+                          </span>
                       )}
                   </label>
               </div>
@@ -116,7 +131,7 @@ export default function SubmitEvidences() {
               type="submit"
               className="w-full bg-blue-700 text-white font-bold py-3 rounded-lg hover:bg-blue-800 transition shadow-lg shadow-blue-900/20"
             >
-              Gửi chứng cứ
+              Gửi tất cả chứng cứ
             </button>
           </form>
         </div>
