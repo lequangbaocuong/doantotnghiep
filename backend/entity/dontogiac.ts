@@ -11,7 +11,7 @@ export enum LoaiToiPham {
 export enum VaiTroNguoiDan {
     NAN_NHAN = 'nạn nhân',
     NHAN_CHUNG = 'nhân chứng',
-    NGHI_PHAM = 'nghi phạm'
+    BAO_HO = 'báo hộ'
 }
 
 export type TrangThaiToGiac = "chưa xử lý" | "đang xử lý" | "đã xử lý" | "từ chối";
