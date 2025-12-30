@@ -3,6 +3,7 @@ import { dontogiac } from "./dontogiac";
 import { canbo } from "./canbo";
 import { nghipham } from "./nghipham";
 import { chungcu } from "./chungcu";
+import { nannhan } from "./nannhan";
 
 export type MucDo = 'ít nghiêm trọng' | 'nghiêm trọng' | 'rất nghiêm trọng' | 'đặc biệt nghiêm trọng';
 
@@ -38,6 +39,9 @@ export class hosovuan {
     @Column({ type: "varchar", length: 6, nullable: true })
     id_canbo!: string;
 
+    // @Column({ type: "varchar", length: 6, nullable: true })
+    // id_nannhan!: string;
+
     @ManyToOne(() => dontogiac)
     @JoinColumn({ name: "id_togiac" })
     dontogiac!: dontogiac;
@@ -51,5 +55,8 @@ export class hosovuan {
 
     @OneToMany(() => chungcu, (cc) => cc.hosovuan)
     ds_chungcu!: chungcu[];
+
+    @OneToMany(() => nannhan, (nn) => nn.hosovuan)
+    ds_nannhan!: nannhan[];
 }
 

@@ -34,6 +34,9 @@ export class nannhan {
     @Column({ type: "varchar", length: 10, nullable: true })
     id_vuan!: string | null ;
 
+    @Column({ type: "varchar", length: 10, nullable: true })
+    id_togiac!: string | null;
+
     @ManyToOne(() => hosovuan)
     @JoinColumn({ name: "id_vuan" })
     hosovuan!: hosovuan;

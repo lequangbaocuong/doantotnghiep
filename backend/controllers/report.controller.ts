@@ -44,6 +44,7 @@ export const reportController = {
                 await nguoidanRepo.save(user);
             }
             nguoidanId = user.id_nguoidan;
+            const newReportId = generateId('DT');
 
             if (vaitronguoidan === 'nạn nhân' || vaitronguoidan === 'báo hộ') {
                 let _ten = hoten; 
@@ -60,35 +61,28 @@ export const reportController = {
                     _tt = tinhtrangNanNhan;
                 }
 
-                let existingVictim = await nannhanRepo.findOne({ 
-                    where: { hovaten: _ten, sodienthoai: _sdt } 
-                });
-
-                if (!existingVictim) {
-                    const lastVictim = await nannhanRepo.find({ order: { id_nannhan: "DESC" }, take: 1 });
-                    let newVictimId = "NN0001"; 
-
-                    if (lastVictim.length > 0) {
-                        const lastId = lastVictim[0].id_nannhan; 
-                        const numberPart = parseInt(lastId.replace("NN", ""));
-                        if (!isNaN(numberPart)) {
-                            newVictimId = `NN${(numberPart + 1).toString().padStart(4, "0")}`;
-                        }
+                const lastVictim = await nannhanRepo.find({ order: { id_nannhan: "DESC" }, take: 1 });
+                let newVictimId = "NN0001"; 
+                if (lastVictim.length > 0) {
+                    const lastId = lastVictim[0].id_nannhan; 
+                    const numberPart = parseInt(lastId.replace("NN", ""));
+                    if (!isNaN(numberPart)) {
+                        newVictimId = `NN${(numberPart + 1).toString().padStart(4, "0")}`;
                     }
-
-                    const newVictim = nannhanRepo.create({
-                        id_nannhan: newVictimId,
-                        hovaten: _ten,         
-                        sodienthoai: _sdt, 
-                        gioitinh: _gt as GioiTinh,    
-                        diachi: _dc,        
-                        tinhtrang: _tt as TinhTrangNanNhan,
-                    });
-                    await nannhanRepo.save(newVictim);
                 }
-            }
 
-            const newReportId = generateId('DT');
+                const newVictim = nannhanRepo.create({
+                    id_nannhan: newVictimId,
+                    hovaten: _ten,         
+                    sodienthoai: _sdt, 
+                    gioitinh: _gt as GioiTinh,    
+                    diachi: _dc,        
+                    tinhtrang: _tt as TinhTrangNanNhan,
+                    id_vuan: null,
+                    id_togiac: newReportId
+                });
+                await nannhanRepo.save(newVictim);
+            }
 
             const newToGiac = dontogiacRepo.create({
                 id_togiac: newReportId, 

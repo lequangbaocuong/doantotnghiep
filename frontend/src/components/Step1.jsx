@@ -52,8 +52,14 @@ export default function ReportStep1({ nextStep, updateFormData, data, userProfil
     if (form.relation === 'báo hộ' && !form.tenNanNhan) {
         return alert("Vui lòng nhập họ tên của người bị hại!");
     }
+
+    const finalForm = { ...form };
+
+    if (form.relation === 'nạn nhân' && !form.tinhtrangNanNhan) {
+        finalForm.tinhtrangNanNhan = 'còn sống';
+    }
     
-    updateFormData(form);
+    updateFormData(finalForm);
     nextStep();
   };
 

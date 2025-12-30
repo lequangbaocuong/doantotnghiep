@@ -111,7 +111,7 @@ export default function ReportStep3({ data, prevStep }) {
                  <div>
                     <span className="block text-gray-500 font-medium">Tình trạng sức khỏe:</span>
                     <span className={`font-bold uppercase ${data.tinhtrangNanNhan === 'bị thương' ? 'text-red-600' : 'text-green-600'}`}>
-                        {data.tinhtrangNanNhan}
+                        {data.tinhtrangNanNhan || "CÒN SỐNG"}
                     </span>
                  </div>
             )}

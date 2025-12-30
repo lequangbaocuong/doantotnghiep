@@ -5,6 +5,7 @@ import { dontogiac } from '../entity/dontogiac';
 import { generateId } from '../utils/idrgenerate.util';
 import { canbo } from '../entity/canbo';
 import { chungcu } from '../entity/chungcu';
+import { nannhan } from '../entity/nannhan';
 import { Like } from 'typeorm';
 
 export const caseController = {
@@ -21,6 +22,7 @@ export const caseController = {
                 trangthai
             } = req.body;
 
+            const nannhanRepo = AppDataSource.getRepository(nannhan);
             const caseRepo = AppDataSource.getRepository(hosovuan);
             const reportRepo = AppDataSource.getRepository(dontogiac);
             const evidenceRepo = AppDataSource.getRepository(chungcu);
@@ -45,12 +47,12 @@ export const caseController = {
                 });
 
                 await evidenceRepo.update(
-                    { 
-                        mota: Like(`%${id_togiac}%`) 
-                    }, 
-                    { 
-                        id_vuan: savedCase.id_vuan 
-                    }
+                    { mota: Like(`%${id_togiac}%`) }, 
+                    { id_vuan: savedCase.id_vuan }
+                )
+                await nannhanRepo.update(
+                    { id_togiac: id_togiac }, 
+                    { id_vuan: savedCase.id_vuan }
                 );
             }
 
@@ -73,7 +75,7 @@ export const caseController = {
 
             const caseDetail = await caseRepo.findOne({
                 where: { id_vuan: id },
-                relations: ["ds_nghipham", "dontogiac", "canbo", "ds_chungcu"]
+                relations: ["ds_nghipham", "dontogiac", "canbo", "ds_chungcu", "ds_nannhan"]
             });
 
             if (!caseDetail) return res.status(404).json({ message: "Không tìm thấy vụ án" });
