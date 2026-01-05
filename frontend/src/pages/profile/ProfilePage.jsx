@@ -6,9 +6,10 @@ export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndHistory = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         setError("Không tìm thấy token. Vui lòng đăng nhập lại.");
@@ -35,6 +36,12 @@ export default function ProfilePage() {
           joinedDate: "11/11/2025", 
           avatar: "/public/avatar-default.png",
         });
+
+        if (apiUser.id) {
+            const historyRes = await axios.get(`http://localhost:5000/api/report/history/${apiUser.id}`);
+            setHistory(historyRes.data);
+        }
+
         setLoading(false);
 
       } catch (err) {
@@ -44,8 +51,18 @@ export default function ProfilePage() {
       }
     };
 
-    fetchProfile();
+    fetchProfileAndHistory();
   }, []);
+
+  const getStatusColor = (status) => {
+    switch(status) {
+        case 'đã xử lý': return 'text-green-400';
+        case 'đang xử lý': return 'text-yellow-400';
+        case 'từ chối': return 'text-red-400';
+        default: return 'text-gray-400';
+    }
+  };
+  
   if (loading) {
     return <div className="min-h-screen bg-[#0f1a26] text-white flex justify-center items-center">Đang tải...</div>;
   }
@@ -225,38 +242,46 @@ export default function ProfilePage() {
         </div>
 
         {/* Lịch sử tố giác */}
-        <hr className="border-gray-700 my-8" />
+       <hr className="border-gray-700 my-8" />
         <h3 className="text-xl font-semibold mb-4 text-[#ff5252]">
-          LỊCH SỬ TỐ GIÁC / PHẢN ÁNH
+          LỊCH SỬ TỐ GIÁC / PHẢN ÁNH ({history.length})
         </h3>
 
-        <div className="overflow-x-auto">
-          {/* Lịch sử tố giác hiện tại đang là dữ liệu mock, cần một API khác để lấy dữ liệu thực tế */}
+        <div className="overflow-x-auto max-h-[400px] overflow-y-auto custom-scrollbar">
           <table className="min-w-full border border-gray-700 text-gray-300 text-sm">
-            <thead className="bg-[#162436] text-gray-200">
+            <thead className="bg-[#162436] text-gray-200 sticky top-0">
               <tr>
-                <th className="px-4 py-2 text-left">STT</th>
+                <th className="px-4 py-2 text-left">Mã đơn tố giác</th>
                 <th className="px-4 py-2 text-left">Tiêu đề</th>
                 <th className="px-4 py-2 text-left">Ngày gửi</th>
                 <th className="px-4 py-2 text-left">Trạng thái</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t border-gray-700 hover:bg-[#1f3248] transition">
-                <td className="px-4 py-2">1</td>
-                <td className="px-4 py-2">Phản ánh trộm xe tại đường Nguyễn Văn Thoại</td>
-                <td className="px-4 py-2">12/08/2025</td>
-                <td className="px-4 py-2 text-yellow-400">Đang xử lý</td>
-              </tr>
-              <tr className="border-t border-gray-700 hover:bg-[#1f3248] transition">
-                <td className="px-4 py-2">2</td>
-                <td className="px-4 py-2">Tố giác hành vi buôn bán ma túy</td>
-                <td className="px-4 py-2">03/05/2025</td>
-                <td className="px-4 py-2 text-green-400">Đã giải quyết</td>
-              </tr>
+              {history.length === 0 ? (
+                 <tr>
+                    <td colSpan="4" className="text-center py-4 text-gray-500 italic">
+                        Bạn chưa gửi đơn tố giác nào.
+                    </td>
+                 </tr>
+              ) : (
+                  history.map((item) => (
+                    <tr key={item.id_togiac} className="border-t border-gray-700 hover:bg-[#1f3248] transition">
+                        <td className="px-4 py-2 font-mono text-[#4ECDC4]">{item.id_togiac}</td>
+                        <td className="px-4 py-2 font-medium">{item.tieude}</td>
+                        <td className="px-4 py-2">
+                            {new Date(item.ngaygui).toLocaleDateString('vi-VN')}
+                        </td>
+                        <td className={`px-4 py-2 font-bold capitalize ${getStatusColor(item.trangthai)}`}>
+                            {item.trangthai}
+                        </td>
+                    </tr>
+                  ))
+              )}
             </tbody>
           </table>
         </div>
+        {/* -------------------------------- */}
       </div>
     </div>
   );

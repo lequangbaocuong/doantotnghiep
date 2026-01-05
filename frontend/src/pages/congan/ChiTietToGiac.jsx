@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, User, Clock, MapPin, FileText, Shield, AlertTriangle, CheckCircle, Smartphone, Mail, Home } from "lucide-react";
+import { ArrowLeft, User, Clock, MapPin, FileText, Shield, AlertTriangle, CheckCircle, Smartphone, Mail, Home, XCircle } from "lucide-react";
 import axios from "axios";
 
 export default function ChiTietToGiac() {
@@ -9,6 +9,22 @@ export default function ChiTietToGiac() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  
+  const handleReject = async () => {
+    if (!window.confirm("Bạn có chắc chắn muốn TỪ CHỐI đơn tố giác này không?")) return;
+    try {
+      await axios.put(`http://localhost:5000/api/report/update-status/${id}`, { 
+        trangthai: "từ chối" 
+      });
+      alert("Đã từ chối đơn tố giác.");
+      setData(prev => ({ ...prev, trangthai: "từ chối" }));
+      
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi cập nhật trạng thái!");
+    }
+  };
 
   useEffect(() => {
     axios.get(`http://localhost:5000/api/report/reports/${id}`)
@@ -191,13 +207,24 @@ export default function ChiTietToGiac() {
               <div className="bg-[#1b2838] p-6 rounded-2xl shadow-lg border border-gray-700">
                 <h2 className="text-sm font-bold text-gray-400 uppercase mb-4">Tác vụ quản lý</h2>
                   <div className="flex flex-col gap-3">
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-medium transition">
-                      Cập nhật trạng thái
-                    </button>
+                    {data.trangthai !== "từ chối" && data.trangthai !== "đã xử lý" && (
+                        <button 
+                            onClick={handleReject}
+                            className="w-full bg-gray-700 hover:bg-gray-600 border border-gray-500 py-2 rounded text-gray-200 font-medium transition flex items-center justify-center gap-2"
+                        >
+                            <XCircle size={18} /> Từ chối tiếp nhận
+                        </button>
+                    )}
+
                     <button
                       onClick={handleCreateCase} 
-                      className="w-full bg-[#ff5252] hover:bg-red-700 py-2 rounded text-white font-medium transition">
-                      Tạo hồ sơ vụ án từ tin này
+                      disabled={data.trangthai === "từ chối"}
+                      className={`w-full py-2 rounded text-white font-medium transition flex items-center justify-center gap-2
+                        ${data.trangthai === "từ chối" 
+                            ? "bg-red-900/50 text-gray-500 cursor-not-allowed" 
+                            : "bg-[#ff5252] hover:bg-red-700"}`}
+                    >
+                      <CheckCircle size={18} /> Tạo hồ sơ vụ án
                     </button>
                 </div>
               </div>

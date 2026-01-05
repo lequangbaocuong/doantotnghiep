@@ -148,5 +148,47 @@ export const reportController = {
             if (!report) return res.status(404).json({ message: "Không tìm thấy" });
             return res.status(200).json(report);
         } catch (error) { return res.status(500).json({ message: "Lỗi server" }); }
+    },
+
+    async updateStatus(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const { trangthai } = req.body;
+
+            const reportRepo = AppDataSource.getRepository(dontogiac);
+            const report = await reportRepo.findOneBy({ id_togiac: id });
+
+            if (!report) {
+                return res.status(404).json({ message: "Không tìm thấy đơn tố giác" });
+            }
+
+            report.trangthai = trangthai;
+            await reportRepo.save(report);
+
+            return res.status(200).json({ 
+                success: true, 
+                message: `Đã cập nhật trạng thái đơn thành: ${trangthai}` 
+            });
+
+        } catch (error) {
+            console.error("Lỗi cập nhật trạng thái:", error);
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+    },
+
+    async getReportHistory(req: Request, res: Response) {
+        try {
+            const { id } = req.params; 
+            const reportRepo = AppDataSource.getRepository(dontogiac);
+            
+            const history = await reportRepo.find({
+                where: { id_nguoidan: id },
+                order: { ngaygui: "DESC" } 
+            });
+            return res.status(200).json(history);
+        } catch (error) {
+            console.error("Lỗi lấy lịch sử:", error);
+            return res.status(500).json({ message: "Lỗi server" });
+        }
     }
 };

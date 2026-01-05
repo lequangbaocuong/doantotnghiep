@@ -59,5 +59,28 @@ export const assignmentController = {
             await repo.save(newTask);
             return res.json({ message: "Giao nhiệm vụ thành công", data: newTask });
         } catch (e) { return res.status(500).json({ message: "Lỗi giao nhiệm vụ" }); }
+    },
+
+    async getMyTasks(req: Request, res: Response) {
+        try {
+            const id_canbo = (req as any).userPayload?.id_canbo || (req as any).user?.id_canbo;
+
+            if (!id_canbo) {
+                return res.status(401).json({ message: "Không xác định được danh tính cán bộ" });
+            }
+
+            const taskRepo = AppDataSource.getRepository(nhiemvudieutra);
+            
+            const tasks = await taskRepo.find({
+                where: { id_canbo: id_canbo },
+                relations: ['kehoach', 'kehoach.hosovuan'], 
+                order: { ngaybatdau: 'DESC' }
+            });
+
+            return res.status(200).json(tasks);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server khi lấy danh sách nhiệm vụ" });
+        }
     }
 };

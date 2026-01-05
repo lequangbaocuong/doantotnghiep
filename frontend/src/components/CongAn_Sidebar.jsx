@@ -1,5 +1,5 @@
 import React from "react";
-import { FileText, Search, Upload, LogOut, Home } from "lucide-react"; // Import thêm icon LogOut, Home
+import { FileText, Search, Upload, LogOut, Home, ListTodo } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function SidebarCongAn() {
@@ -33,6 +33,13 @@ export default function SidebarCongAn() {
         >
           <Search className="w-6 h-6" />
           <span>Xem hồ sơ vụ án</span>
+        </Link>
+        <Link
+          to="/congan/nhiemvu"
+          className="flex items-center gap-3 p-3 bg-[#0f1a26] rounded-lg hover:bg-[#4ECDC4] hover:text-black transition"
+        >
+            <ListTodo className="w-6 h-6" />
+            <span>Nhiệm vụ</span>
         </Link>
       </nav>
 

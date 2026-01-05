@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Search, Eye, Filter } from "lucide-react";
+import { Search, Eye, Filter, Ban } from "lucide-react"; // Thêm icon Ban (biển cấm) cho đẹp
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ export default function DanhSachToGiac() {
   const [filterStatus, setFilterStatus] = useState("all");
 
   useEffect(() => {
+    // Gọi API lấy danh sách mới nhất để đảm bảo trạng thái được cập nhật
     axios.get("http://localhost:5000/api/report/reports") 
       .then(res => {
         setReports(res.data);
@@ -21,7 +22,6 @@ export default function DanhSachToGiac() {
       });
   }, []);
 
-  // Xử lý màu sắc trạng thái dựa theo ENUM trong Database
   const getStatusBadge = (status) => {
     switch (status) {
       case "chưa xử lý":
@@ -37,7 +37,6 @@ export default function DanhSachToGiac() {
     }
   };
 
-  // Logic lọc dữ liệu
   const filtered = reports.filter(r => {
     const matchesSearch = 
       r.tieude?.toLowerCase().includes(search.toLowerCase()) ||
@@ -56,7 +55,6 @@ export default function DanhSachToGiac() {
         </h1>
         <p className="text-gray-400 text-center mb-8">Danh sách các tin báo gửi từ cổng thông tin người dân</p>
 
-        {/* Toolbar: Tìm kiếm & Bộ lọc */}
         <div className="flex flex-col md:flex-row items-center gap-4 mb-6 bg-[#1b2838] p-4 rounded-xl shadow-lg border border-gray-700">
           <div className="flex items-center gap-3 flex-1 bg-[#0f1a26] px-4 py-2 rounded-lg border border-gray-600 w-full">
             <Search className="text-gray-400" size={20} />
@@ -85,7 +83,6 @@ export default function DanhSachToGiac() {
           </div>
         </div>
 
-        {/* Bảng danh sách */}
         <div className="overflow-hidden rounded-xl shadow-lg border border-gray-700">
           <table className="w-full text-left bg-[#1b2838]">
             <thead>
@@ -135,18 +132,30 @@ export default function DanhSachToGiac() {
                             <span className="text-green-400 text-xs">Không</span>
                         )}
                     </td>
+                    
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusBadge(item.trangthai)} capitalize`}>
                         {item.trangthai}
                       </span>
                     </td>
+
                     <td className="px-6 py-4 text-center">
-                      <Link
-                        to={`/congan/danhsachtogiac/${item.id_togiac}`}
-                        className="inline-flex items-center gap-2 bg-[#ff5252] hover:bg-[#ff3b3b] text-white px-3 py-1.5 rounded-md text-sm transition shadow-lg shadow-red-900/20"
-                      >
-                        <Eye size={16} /> Chi tiết
-                      </Link>
+                      {item.trangthai === "từ chối" ? (
+                        <button
+                          disabled
+                          className="inline-flex items-center gap-2 bg-gray-700 text-gray-500 px-3 py-1.5 rounded-md text-sm border border-gray-600 cursor-not-allowed opacity-70"
+                          title="Đơn này đã bị từ chối tiếp nhận"
+                        >
+                          <Ban size={16} /> Đã hủy
+                        </button>
+                      ) : (
+                        <Link
+                          to={`/congan/danhsachtogiac/${item.id_togiac}`}
+                          className="inline-flex items-center gap-2 bg-[#ff5252] hover:bg-[#ff3b3b] text-white px-3 py-1.5 rounded-md text-sm transition shadow-lg shadow-red-900/20"
+                        >
+                          <Eye size={16} /> Chi tiết
+                        </Link>
+                      )}
                     </td>
                   </tr>
                 ))
