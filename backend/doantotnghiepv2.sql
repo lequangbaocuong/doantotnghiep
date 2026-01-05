@@ -310,5 +310,40 @@ ALTER TABLE chungcu ADD CONSTRAINT fk_chungcu_vuan
 FOREIGN KEY (id_vuan) REFERENCES hosovuan(id_vuan) 
 ON UPDATE CASCADE ON DELETE CASCADE;
 
-select * from dontogiac;
-delete from dontogiac
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 2. Xóa dữ liệu từng bảng (Dùng TRUNCATE để reset sạch sẽ)
+TRUNCATE TABLE `togiac_vuan`;
+TRUNCATE TABLE `ketquavuan`;
+TRUNCATE TABLE `nhiemvudieutra`;
+TRUNCATE TABLE `kehoachdieutra`;
+TRUNCATE TABLE `vatchung`;
+TRUNCATE TABLE `nannhan`;
+TRUNCATE TABLE `nghipham`;
+TRUNCATE TABLE `truyna`;
+TRUNCATE TABLE `chungcu`;
+TRUNCATE TABLE `hosovuan`;
+TRUNCATE TABLE `dontogiac`;
+TRUNCATE TABLE `nguoidan`;
+
+-- Lưu ý: Không xóa bảng 'canbo' và 'vaitro' nếu bạn muốn giữ lại tài khoản Admin/Cán bộ để đăng nhập
+-- Nếu muốn xóa luôn cả Cán bộ (reset toàn bộ hệ thống về 0), hãy bỏ comment 2 dòng dưới:
+-- TRUNCATE TABLE `canbo`;
+-- TRUNCATE TABLE `vaitro`;
+
+-- 3. Bật lại kiểm tra khóa ngoại
+SET FOREIGN_KEY_CHECKS = 1;
+
+SELECT * FROM hosovuan ORDER BY ngaytao DESC LIMIT 5;
+
+ALTER TABLE nannhan ADD COLUMN id_togiac VARCHAR(10);
+
+-- Tạo khóa ngoại liên kết với bảng dontogiac (nếu cần thiết cho toàn vẹn dữ liệu)
+ALTER TABLE nannhan ADD CONSTRAINT fk_nannhan_togiac 
+FOREIGN KEY (id_togiac) REFERENCES dontogiac(id_togiac) 
+ON UPDATE CASCADE ON DELETE SET NULL;
+
+
+ALTER TABLE nghipham 
+MODIFY COLUMN tinhtrangbatgiu 
+ENUM('đang bắt giữ', 'đã bắt giữ', 'truy nã', 'tại ngoại', 'khác') DEFAULT 'khác';

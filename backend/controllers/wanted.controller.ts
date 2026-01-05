@@ -130,6 +130,21 @@ export const truynaController = {
         } catch (e) { return res.status(500).json({ message: "Lỗi lấy dữ liệu" }); }
     },
 
+    async getDetail(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const truynaRepo = AppDataSource.getRepository(truyna);
+            const item = await truynaRepo.findOneBy({ id_truyna: id });
+
+            if (!item) {
+                return res.status(404).json({ message: "Không tìm thấy lệnh truy nã" });
+            }
+            return res.status(200).json(item);
+        } catch (error) {
+            return res.status(500).json({ message: "Lỗi server" });
+        }
+    },
+    
     async getAllWanted(req: Request, res: Response) {
         try {
             const repo = AppDataSource.getRepository(truyna);

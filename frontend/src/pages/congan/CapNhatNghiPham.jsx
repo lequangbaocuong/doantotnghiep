@@ -147,14 +147,24 @@ export default function CapNhatNghiPham() {
                 <Upload /> Hồ sơ pháp lý & Ảnh
             </h3>
 
-             <div>
-                <label className="block text-gray-400 mb-1">Tình trạng hiện tại</label>
-                <select name="tinhtrangbatgiu" value={formData.tinhtrangbatgiu} onChange={handleChange} className="w-full bg-[#162436] border border-gray-600 rounded px-3 py-2 text-white">
-                    <option value="đang bắt giữ">Đang bắt giữ</option>
-                    <option value="đã bắt giữ">Đã bắt giữ (Có lệnh)</option>
-                    <option value="truy nã">Đang truy nã</option>
-                    <option value="tại ngoại">Được tại ngoại</option>
-                </select>
+              <div>
+                <div>
+                  <label className="block text-gray-400 mb-1">Tình trạng hiện tại</label>
+                  <select 
+                      name="tinhtrangbatgiu" 
+                      value={formData.tinhtrangbatgiu} 
+                      onChange={handleChange} 
+                      className="w-full bg-[#162436] border border-gray-600 rounded px-3 py-2 text-white"
+                  >
+                      <option value="đang bắt giữ">Đang bắt giữ</option>
+                      <option value="đã bắt giữ">Đã bắt giữ (Có lệnh)</option>
+                      <option value="truy nã">Đang truy nã</option>
+                      <option value="tại ngoại">Được tại ngoại</option>
+                      
+                      {/* --- Thêm dòng này --- */}
+                      <option value="khác">Khác</option> 
+                  </select>
+              </div>
             </div>
 
             <div>

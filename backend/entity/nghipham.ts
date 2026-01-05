@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { hosovuan } from "./hosovuan";
 
 export type GioiTinh = "nam" | "nữ" | "khác";
-export type TinhTrang = 'đang bắt giữ' | 'đã bắt giữ' | 'tại ngoại' | 'truy nã'; 
+export type TinhTrang = 'đang bắt giữ' | 'đã bắt giữ' | 'tại ngoại' | 'truy nã' | 'khác'; 
 
 @Entity("nghipham")
 export class nghipham {

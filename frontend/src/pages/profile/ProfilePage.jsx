@@ -235,7 +235,7 @@ export default function ProfilePage() {
           <table className="min-w-full border border-gray-700 text-gray-300 text-sm">
             <thead className="bg-[#162436] text-gray-200">
               <tr>
-                <th className="px-4 py-2 text-left">#</th>
+                <th className="px-4 py-2 text-left">STT</th>
                 <th className="px-4 py-2 text-left">Tiêu đề</th>
                 <th className="px-4 py-2 text-left">Ngày gửi</th>
                 <th className="px-4 py-2 text-left">Trạng thái</th>

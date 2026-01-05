@@ -26,6 +26,7 @@ import QuanLyTruyNa from "../pages/admin/QuanLyTruyNa";
 import ProtectedRouteCanBo from "../components/ProtectedRoute_Canbo";
 import ManageCitizenAccounts from "../pages/admin/ManageCitizen";
 import CapNhatNghiPham from "../pages/congan/CapNhatNghiPham";
+import ChiTietTruyNa from "../pages/congan/ChiTietTruyNa";
 
 export default function Congan_Routes() {
     return (  
@@ -51,6 +52,7 @@ export default function Congan_Routes() {
                     <Route path="/thutruong/phan-tich-vu-an" element={<PhanTichVuAn />} />
                     <Route path="/thutruong/phan-cong-dieu-tra" element={<PhanCongDieuTra />} />
                     <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
+                    <Route path="/thutruong/duyet-truy-na/:id" element={<ChiTietTruyNa />} />
                 </Route>
 
                 <Route element={<AdminLayout />}>

@@ -8,6 +8,11 @@ export default function DangTaiTruyNa() {
   const location = useLocation();
   const [user, setUser] = useState(null);
   
+  const getImageUrl = (path) => {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;  
+  };
+
   const prefillData = location.state?.prefillData || {};
 
   const [formData, setFormData] = useState({
@@ -208,7 +213,7 @@ export default function DangTaiTruyNa() {
 
             {existingImage && !formData.anh && (
                 <div className="mb-3 flex items-center gap-4 bg-[#162436] p-3 rounded border border-gray-600">
-                    <img src={`http://localhost:5000${existingImage}`} alt="old" className="w-16 h-16 object-cover rounded" />
+                    <img src={getImageUrl(existingImage)} alt="old" className="w-16 h-16 object-cover rounded" />
                     <div>
                         <p className="text-sm text-green-400">Đang sử dụng ảnh từ hồ sơ nghi phạm</p>
                         <p className="text-xs text-gray-500">Tải lên ảnh mới bên dưới để thay thế</p>

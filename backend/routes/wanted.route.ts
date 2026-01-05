@@ -10,5 +10,6 @@ router.put('/update-status/:id', truynaController.updateStatus);
 
 router.get('/approved', truynaController.getApproved);
 router.get('/all', truynaController.getAllWanted); 
+router.get('/detail/:id', truynaController.getDetail)
 router.delete('/:id', truynaController.deleteWanted); 
 export default router;

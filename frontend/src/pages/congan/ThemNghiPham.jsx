@@ -188,14 +188,13 @@ export default function ThemNghiPham() {
                                 name="tinhtrangbatgiu"
                                 onChange={handleChange}
                                 className="w-full rounded border border-gray-600 bg-[#162436] px-3 py-2 text-white"
+                                value={formData.tinhtrangbatgiu} 
                             >
-                                <option value="đang bắt giữ">
-                                    Đang bắt giữ
-                                </option>
-                                <option value="đã bắt giữ">
-                                    Đã bắt giữ (Đã có lệnh)
-                                </option>
+                                <option value="đang bắt giữ">Đang bắt giữ</option>
+                                <option value="đã bắt giữ">Đã bắt giữ (Đã có lệnh)</option>
                                 <option value="truy nã">Đang truy nã</option>
+                                <option value="tại ngoại">Đang tại ngoại</option>
+                                <option value="khác">Khác</option>
                             </select>
                         </div>
 
