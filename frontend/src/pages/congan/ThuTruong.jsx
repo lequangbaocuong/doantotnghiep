@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, PieChart, FileSearch, CheckCircle } from "lucide-react";
+import { BarChart3, PieChart, FileSearch, CheckCircle, FileText } from "lucide-react";
 
 export default function ThuTruongDonVi() {
   const navigate = useNavigate();
@@ -73,6 +73,20 @@ export default function ThuTruongDonVi() {
           </p>
           <button className="px-4 py-2 bg-[#FF6B6B] rounded-md hover:bg-[#e05252]">
             Duyệt ngay
+          </button>
+        </div>
+
+        <div
+          onClick={() => navigate("/thutruong/duyet-ket-luan")}
+          className="bg-[#1b2838] p-6 rounded-2xl shadow-lg hover:scale-105 transition-transform cursor-pointer"
+        >
+          <FileText className="text-[#A29BFE] w-10 h-10 mb-3" />
+          <h2 className="text-xl font-semibold mb-2">Duyệt kết luận điều tra</h2>
+          <p className="text-gray-400 text-sm mb-3">
+            Xem xét báo cáo và ra quyết định kết thúc vụ án.
+          </p>
+          <button className="px-4 py-2 bg-[#A29BFE] rounded-md hover:bg-[#8e86fa]">
+            Xem danh sách
           </button>
         </div>
       </div>

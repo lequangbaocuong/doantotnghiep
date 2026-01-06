@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Briefcase, FileText, ListTodo, Plus, User, Calendar } from "lucide-react";
+import { Briefcase, FileText, ListTodo, Plus, User, Calendar, CheckCircle, Clock } from "lucide-react";
 import axios from "axios";
 
 export default function PhanCongDieuTra() {
+  // --- State quản lý dữ liệu ---
   const [cases, setCases] = useState([]);
   const [officers, setOfficers] = useState([]);
   
@@ -11,6 +12,7 @@ export default function PhanCongDieuTra() {
   const [selectedPlan, setSelectedPlan] = useState(null); 
   const [tasks, setTasks] = useState([]); 
 
+  // --- State cho Form tạo mới ---
   const [showPlanForm, setShowPlanForm] = useState(false);
   const [newPlan, setNewPlan] = useState({ noidung: "", thoihan: "" });
 
@@ -26,7 +28,7 @@ export default function PhanCongDieuTra() {
                 axios.get("http://localhost:5000/api/cases"),
                 axios.get("http://localhost:5000/api/cases/investigators")
             ]);
-            setCases(Array.isArray(resCases.data) ? resCases.data : resCases.data.data);
+            setCases(Array.isArray(resCases.data) ? resCases.data : resCases.data.data || []);
             setOfficers(resOff.data);
         } catch (e) { console.error(e); }
     };
@@ -40,14 +42,16 @@ export default function PhanCongDieuTra() {
                  setPlans(res.data);
                  setSelectedPlan(null); 
                  setTasks([]);
-             });
+             })
+             .catch(e => console.error(e));
     }
   }, [selectedCase]);
 
   useEffect(() => {
     if (selectedPlan) {
         axios.get(`http://localhost:5000/api/assignments/tasks/${selectedPlan}`)
-             .then(res => setTasks(res.data));
+             .then(res => setTasks(res.data))
+             .catch(e => console.error(e));
     }
   }, [selectedPlan]);
 
@@ -58,6 +62,7 @@ export default function PhanCongDieuTra() {
           setShowPlanForm(false);
           const res = await axios.get(`http://localhost:5000/api/assignments/plans/${selectedCase}`);
           setPlans(res.data);
+          setNewPlan({ noidung: "", thoihan: "" }); 
       } catch (e) { alert("Lỗi tạo kế hoạch"); }
   };
 
@@ -68,6 +73,7 @@ export default function PhanCongDieuTra() {
           setShowTaskForm(false);
           const res = await axios.get(`http://localhost:5000/api/assignments/tasks/${selectedPlan}`);
           setTasks(res.data);
+          setNewTask({ tennhiemvu: "", noidung: "", ngaybatdau: "", ngayketthuc: "", id_canbo: "" }); 
       } catch (e) { alert("Lỗi giao nhiệm vụ"); }
   };
 
@@ -76,6 +82,7 @@ export default function PhanCongDieuTra() {
       <h1 className="text-2xl font-bold mb-6 text-[#FFA502] uppercase text-center">Chỉ đạo & Phân công điều tra</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[80vh]">
+        
         <div className="bg-[#1b2838] p-4 rounded-xl border border-gray-700 flex flex-col">
             <h2 className="font-bold mb-4 text-[#4ECDC4] flex items-center gap-2"><Briefcase size={20}/> 1. Chọn Vụ Án</h2>
             <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
@@ -151,16 +158,37 @@ export default function PhanCongDieuTra() {
                 </div>
             )}
 
-            <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
                 {!selectedPlan ? <p className="text-gray-500 text-center text-sm mt-10">← Chọn kế hoạch trước</p> : 
                  tasks.length === 0 ? <p className="text-gray-500 text-center text-sm mt-10">Chưa có nhiệm vụ nào.</p> :
                  tasks.map(t => (
-                    <div key={t.id_nhiemvu} className="p-3 rounded border bg-[#0f1a26] border-gray-600">
-                        <p className="font-bold text-sm text-[#FF6B6B]">{t.tennhiemvu}</p>
-                        <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
-                            <span className="flex items-center gap-1"><User size={12}/> {t.canbo?.hoten || "Chưa giao"}</span>
-                            <span className="bg-gray-700 px-2 py-0.5 rounded">{t.trangthai}</span>
+                    <div key={t.id_nhiemvu} className={`p-3 rounded border flex flex-col gap-2 transition ${t.trangthai === 'Hoàn thành' ? 'bg-[#0f1a26] border-green-500/50' : 'bg-[#0f1a26] border-gray-600'}`}>
+                        <div className="flex justify-between items-start">
+                            <p className="font-bold text-sm text-[#FF6B6B] line-clamp-2">{t.tennhiemvu}</p>
+                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap ${
+                                t.trangthai === 'Hoàn thành' 
+                                    ? 'bg-green-900/50 text-green-400 border border-green-700' 
+                                    : 'bg-gray-700 text-gray-300'
+                            }`}>
+                                {t.trangthai}
+                            </span>
                         </div>
+
+                        <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span className="flex items-center gap-1"><User size={12}/> {t.canbo?.hoten || "Chưa giao"}</span>
+                            {t.ngayketthuc && (
+                                <span className="flex items-center gap-1 text-yellow-500"><Clock size={12}/> {new Date(t.ngayketthuc).toLocaleDateString('vi-VN')}</span>
+                            )}
+                        </div>
+
+                        {t.trangthai === 'Hoàn thành' && t.ketqua && (
+                            <div className="mt-2 p-2 bg-green-900/10 border border-green-500/30 rounded text-xs animate-fadeIn">
+                                <div className="flex items-center gap-1 text-green-400 font-bold mb-1">
+                                    <CheckCircle size={12}/> Kết quả báo cáo:
+                                </div>
+                                <p className="text-gray-300 italic whitespace-pre-line">{t.ketqua}</p>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

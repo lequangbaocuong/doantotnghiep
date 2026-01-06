@@ -25,6 +25,9 @@ export class nhiemvudieutra {
     @Column({ type: "varchar", length: 10 })
     id_kehoach!: string;
 
+    @Column("text", { nullable: true })
+    ketqua!: string;
+
     @ManyToOne(() => kehoachdieutra)
     @JoinColumn({ name: "id_kehoach" })
     kehoach!: kehoachdieutra;

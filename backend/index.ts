@@ -11,6 +11,7 @@ import wantedRoutes from "./routes/wanted.route";
 import assignmentRoutes from "./routes/assignment.route";
 import adminRoutes from "./routes/admin.route";
 import evidenceRoutes from "./routes/evidence.route";
+import resultRoutes from "./routes/result.route"
 dotenv.config();
 
 const app = express();
@@ -29,6 +30,7 @@ app.use("/api/wanted", wantedRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/evidence", evidenceRoutes); 
+app.use("/api/results", resultRoutes);
 
 AppDataSource.initialize()
     .then(() => {

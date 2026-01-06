@@ -56,6 +56,14 @@ export default function ChiTietVuAn() {
                 <div className="flex gap-2">
                     <span className="rounded-full border border-blue-600/50 bg-blue-600/20 px-3 py-1 text-sm capitalize text-blue-400">{vuAn.trangthai}</span>
                     <span className="rounded-full border border-red-600/50 bg-red-600/20 px-3 py-1 text-sm capitalize text-red-400">{vuAn.mucdo}</span>
+                    {vuAn.trangthai === "Đang điều tra" && (
+                        <button 
+                            onClick={() => navigate("/congan/ketluan", { state: { id_vuan: vuAn.id_vuan, tenvuan: vuAn.tenvuan } })}
+                            className="bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold hover:bg-green-700 transition shadow-lg shadow-green-900/50"
+                        >
+                            Lập kết luận điều tra
+                        </button>
+                    )}                
                 </div>
             </div>
 

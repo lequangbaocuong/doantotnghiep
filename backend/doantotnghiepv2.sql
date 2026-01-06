@@ -343,7 +343,7 @@ ALTER TABLE nannhan ADD CONSTRAINT fk_nannhan_togiac
 FOREIGN KEY (id_togiac) REFERENCES dontogiac(id_togiac) 
 ON UPDATE CASCADE ON DELETE SET NULL;
 
-
+ALTER TABLE nhiemvudieutra ADD COLUMN ketqua TEXT NULL; 
 ALTER TABLE nghipham 
 MODIFY COLUMN tinhtrangbatgiu 
 ENUM('đang bắt giữ', 'đã bắt giữ', 'truy nã', 'tại ngoại', 'khác') DEFAULT 'khác';

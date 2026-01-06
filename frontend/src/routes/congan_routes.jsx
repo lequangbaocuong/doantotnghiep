@@ -28,6 +28,8 @@ import ManageCitizenAccounts from "../pages/admin/ManageCitizen";
 import CapNhatNghiPham from "../pages/congan/CapNhatNghiPham";
 import ChiTietTruyNa from "../pages/congan/ChiTietTruyNa";
 import NhiemVu from "../pages/congan/NhiemVu";
+import KetLuan from "../pages/congan/KetLuan";
+import DuyetKetLuan from "../pages/congan/DuyetKetLuan";
 
 export default function Congan_Routes() {
     return (  
@@ -47,6 +49,7 @@ export default function Congan_Routes() {
                     <Route path="/congan/nghipham/:id" element={<ChiTietNghiPham />} />
                     <Route path="/congan/suanghipham/:id" element={<CapNhatNghiPham />} />
                     <Route path="/congan/nhiemvu" element={<NhiemVu/>} />
+                    <Route path="/congan/ketluan" element={<KetLuan />} />
                 </Route>
 
                 <Route element={<ThuTruongLayout />}>
@@ -55,6 +58,7 @@ export default function Congan_Routes() {
                     <Route path="/thutruong/phan-cong-dieu-tra" element={<PhanCongDieuTra />} />
                     <Route path="/thutruong/duyet-truy-na" element={<DuyetTruyNa />} />
                     <Route path="/thutruong/duyet-truy-na/:id" element={<ChiTietTruyNa />} />
+                    <Route path="/thutruong/duyet-ket-luan" element={<DuyetKetLuan />} />
                 </Route>
 
                 <Route element={<AdminLayout />}>

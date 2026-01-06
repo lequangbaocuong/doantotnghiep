@@ -82,5 +82,36 @@ export const assignmentController = {
             console.error(error);
             return res.status(500).json({ message: "Lỗi server khi lấy danh sách nhiệm vụ" });
         }
+    },
+
+   async submitTaskResult(req: Request, res: Response) {
+        try {
+            const { id_nhiemvu } = req.params;
+            const { ketqua } = req.body; 
+            if (!ketqua) {
+                return res.status(400).json({ message: "Vui lòng nhập nội dung báo cáo!" });
+            }
+
+            const taskRepo = AppDataSource.getRepository(nhiemvudieutra);
+            const task = await taskRepo.findOneBy({ id_nhiemvu });
+
+            if (!task) {
+                return res.status(404).json({ message: "Không tìm thấy nhiệm vụ" });
+            }
+
+            task.ketqua = ketqua;
+            task.trangthai = "Hoàn thành"; 
+
+            await taskRepo.save(task);
+
+            return res.status(200).json({ 
+                success: true, 
+                message: "Đã báo cáo kết quả và hoàn thành nhiệm vụ!", 
+                data: task 
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Lỗi server khi báo cáo nhiệm vụ" });
+        }
     }
 };

@@ -9,5 +9,5 @@ router.post('/plan', assignmentController.createPlan);
 router.get('/tasks/:id_kehoach', assignmentController.getTasksByPlan);
 router.post('/task', assignmentController.createTask);
 router.get('/my-tasks', verifyToken, assignmentController.getMyTasks);
-
+router.put('/submit-result/:id_nhiemvu', verifyToken, assignmentController.submitTaskResult);
 export default router;
